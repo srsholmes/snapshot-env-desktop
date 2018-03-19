@@ -8,29 +8,51 @@ const {
 
 import promisify from '../utils/promisify';
 
-console.log({ promisify });
-const { createServer } = require('http-server'); // FIX ME
 const exec = promisify(require('child_process').exec);
 const { fork } = require('child_process');
+
+const { server } = require('../../server');
+const { Checkout } = require('nodegit');
+
+const remote = require('electron').remote;
+
+const BrowserWindow = remote.BrowserWindow;
 
 const info = chalk.blue;
 const go = chalk.green;
 const error = chalk.bold.red;
 const { log } = console;
 const separator = () => log('*'.repeat(80));
+let testWindow;
+const openNewWindow = port => {
+  console.log('Opening new window....');
+  console.log({ port });
+  testWindow = new BrowserWindow({
+    frame: true,
+    show: true,
+    width: 800,
+    height: 400
+  });
+
+  testWindow.loadURL(`http://localhost:${port}/`);
+
+  testWindow.webContents.on('did-finish-load', () => {
+    if (!testWindow) {
+      throw new Error('"testWindow" is not defined');
+    }
+    testWindow.show();
+    testWindow.focus();
+  });
+
+  testWindow.on('closed', () => {
+    testWindow = null;
+  });
+};
 
 // const getCurrentGitBranch = async () => {
 //   log(info('Getting current git branch'));
 //   const { stdout } = await exec('git rev-parse --abbrev-ref HEAD');
 //   return stdout;
-// };
-
-// const checkoutGitCommit = async commit => {
-//   if (commit) {
-//     log(info(`Checking out commit: ${commit}`));
-//     const res = await exec(`git checkout -f ${commit}`).stdout;
-//     log(('Output:', res));
-//   }
 // };
 
 // const warnIfUncommittedChanges = async commit => {
@@ -110,12 +132,21 @@ const separator = () => log('*'.repeat(80));
 //   log(info('Custom server started....'));
 // };
 
+const checkoutGitCommit = async (path, commit, repo) => {
+  if (commit) {
+    console.log({ path });
+    const simpleGit = require('simple-git')(path);
+    simpleGit.checkout(commit, res => {
+      console.log('CHECKED OUT COMMIT', commit);
+    });
+  }
+};
+
 const createLocalServer = async (dir, path) => {
   separator();
   log('No custom server found, creating static hosted server');
-  createServer({
-    root: `${path}/${dir}`
-  }).listen(parseInt(4567, 10));
+  const PORT = await server(dir);
+  await openNewWindow(PORT);
   log(go(`View local deploy here: http://localhost:${PORT}`));
 };
 
@@ -130,20 +161,21 @@ const runBuildStep = async (cmd, path) => {
   log(error('stderr:', stderr));
 };
 
-const copyBuildDir = async (output, path) => {
+const copyBuildDir = async (output, path, commitId) => {
   separator();
   log(info('Copying output directory...........!'));
   // const { stdout } = await exec("git log --pretty=format:'%h' -n 1");
-  const dir = `${path}/${TEMP_DIR}/${'desktopTest'}`;
+  const dir = `${path}/${TEMP_DIR}/${commitId}`;
   await copy(`${path}/${output}`, dir);
   log(info('Directory copied!'));
   return dir;
 };
 
 const snapshot = async ({ state, dispatch }) => {
-  const { git, project } = state;
+  const { git, project, commitsTable } = state;
   const { repo } = git;
   const { path } = project;
+  const { row: { commitId } } = commitsTable;
   const snapshotJson = await readFile(`${`${path}/${ENV_PATH}`}`);
   const config = JSON.parse(snapshotJson);
   const { build, output } = config;
@@ -153,7 +185,9 @@ const snapshot = async ({ state, dispatch }) => {
   try {
     // await ignoreSnapshot();
     // await warnIfUncommittedChanges(commit);
-    // await checkoutGitCommit(commit);
+    const blob = await checkoutGitCommit(path, commitId, repo);
+    console.log('BLOB');
+    console.log({ blob });
     await runBuildStep(build, path);
     const directoryToHost = await copyBuildDir(output, path);
     // if (server) {
