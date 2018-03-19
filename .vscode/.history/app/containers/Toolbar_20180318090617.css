@@ -1,0 +1,15 @@
+.toolbar {
+  padding: 10px;
+  /* background: red; */
+}
+
+.toolbarIcons {
+  /* background: green; */
+  width: 30%;
+  display: flex;
+}
+
+.icon {
+  border: 1px solid black;
+  margin-right: 10px;
+}

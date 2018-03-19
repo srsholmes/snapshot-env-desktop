@@ -1,0 +1,15 @@
+// @flow
+import { combineReducers } from 'redux';
+import { routerReducer as router } from 'react-router-redux';
+import git from './git';
+import project from './project';
+import commitsTable from './commitsTable';
+
+const rootReducer = combineReducers({
+  commitsTable,
+  git,
+  project,
+  router
+});
+
+export default rootReducer;

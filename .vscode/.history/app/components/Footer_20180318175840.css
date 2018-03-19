@@ -1,0 +1,7 @@
+.footer {
+  background: red;
+  position: fixed;
+  flex: 1;
+  color: #4a4a4a;
+  display: flex;
+}

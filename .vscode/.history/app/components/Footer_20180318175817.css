@@ -1,0 +1,6 @@
+.footer {
+  background: red;
+  position: fixed;
+  color: #4a4a4a;
+  display: flex;
+}

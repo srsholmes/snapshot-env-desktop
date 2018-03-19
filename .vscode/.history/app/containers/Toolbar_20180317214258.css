@@ -1,0 +1,9 @@
+.toolbar {
+  padding: 10px;
+  background: red;
+}
+
+.toolbarIcons {
+  background: green;
+  width: 30%;
+}
