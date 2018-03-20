@@ -1,8 +1,7 @@
 // @flow
-import git from 'nodegit';
-
 import snapshot from '../utils/snapshot';
 
+const simpleGit = require('simple-git/promise');
 const Chance = require('chance');
 
 const c = new Chance();
@@ -35,16 +34,16 @@ const randomComment = getRandomNote(NOTES);
 
 export function getRepoInfo(path) {
   return async (dispatch: action => void) => {
-    const repo = await git.Repository.open(path);
-    const branch = await repo.getCurrentBranch();
-    const walker = git.Revwalk.create(repo);
-    walker.pushGlob('refs/heads/*');
-    const commitData = await walker.getCommitsUntil(c => true);
-    const commits = commitData.map(x => ({
-      commitId: x.sha(),
-      commitMessage: x.message().split('\n')[0],
-      commitDate: x.date().toString(),
-      author: x.author().toString(),
+    const repo = await simpleGit(path);
+    const branch = await repo.branch();
+    const logs = await repo.log();
+
+    const commits = logs.all.map(x => ({
+      commitId: x.hash,
+      commitMessage: x.message,
+      commitDate: x.date,
+      author: x.author_name,
+      authorEmail: x.author_email,
       notes: randomComment()
     }));
 
