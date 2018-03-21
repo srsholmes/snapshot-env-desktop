@@ -11,6 +11,16 @@ const {
 } = require('fs-extra');
 const { server } = require('../../server');
 
+// const { getCurrentWindow, globalShortcut } = require('electron').remote;
+
+// const reload = () => {
+//   getCurrentWindow().reload();
+// };
+
+// globalShortcut.register('F5', reload);
+// globalShortcut.register('CommandOrControl+R', reload);
+// here is the fix bug #3778, if you know alternative ways, please write them
+
 const BrowserWindow = remote.BrowserWindow;
 const info = chalk.blue;
 const go = chalk.green;

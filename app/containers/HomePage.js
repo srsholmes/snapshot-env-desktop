@@ -27,7 +27,6 @@ class Homepage extends Component {
   handleChange = e => console.log(e.target.value);
 
   handleClick = n => e => {
-    console.log(this.props);
     const { actions: { setProjectPath, getRepoInfo } } = this.props;
     this.setState({ selected: n });
     dialog.showOpenDialog(
@@ -41,8 +40,6 @@ class Homepage extends Component {
   };
 
   render() {
-    console.log('((((((((((object))))))))))');
-    console.log(this.props);
     return (
       <React.Fragment>
         <TitleBar controls inset title="Snapshot Env" />

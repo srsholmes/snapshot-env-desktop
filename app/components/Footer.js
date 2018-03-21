@@ -6,7 +6,6 @@ import { Button } from 'react-desktop/macOs';
 
 export default class Footer extends Component<Props> {
   render() {
-    console.log('Footer PROPS', this.props);
     const { runSnapshot } = this.props.actions;
     return (
       <div className={styles.footer}>

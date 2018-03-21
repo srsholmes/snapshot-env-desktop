@@ -10,8 +10,14 @@
  *
  * @flow
  */
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, globalShortcut, getCurrentWindow } from 'electron';
 import MenuBuilder from './menu';
+
+const reload = () => {
+  const currentWin = getCurrentWindow();
+  console.log({ currentWin });
+  currentWin.reload();
+};
 
 let mainWindow = null;
 
@@ -68,8 +74,23 @@ app.on('ready', async () => {
       throw new Error('"mainWindow" is not defined');
     }
     mainWindow.show();
-    mainWindow.focus();
+    // mainWindow.focus();
   });
+
+  // mainWindow.on('browser-window-blur', () => {
+  //   console.log('MAIN WINDOW BLUR');
+  //   // Register a 'CommandOrControl+Y' shortcut listener.
+  //   globalShortcut.unregister('CommandOrControl+R');
+  // });
+
+  mainWindow.addEventListener('beforeunload', () => {
+    console.log('beforeunload');
+    globalShortcut.unregister('F5', reload);
+    globalShortcut.unregister('CommandOrControl+R', reload);
+  });
+
+  globalShortcut.register('F5', reload);
+  globalShortcut.register('CommandOrControl+R', reload);
 
   mainWindow.on('closed', () => {
     mainWindow = null;

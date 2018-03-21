@@ -34,9 +34,7 @@ export default class CommitsTable extends Component<Props> {
     );
   }
   render() {
-    const { selected, data } = this.state;
     const { selectedRow } = this.props.commitsTable;
-    console.log('TABLE PROPS', this.props);
     const { commits } = this.props.git;
     if (!commits.length) return null;
     return (
