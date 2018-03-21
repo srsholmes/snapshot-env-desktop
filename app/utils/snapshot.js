@@ -19,9 +19,9 @@ const { log } = console;
 const separator = () => log('*'.repeat(80));
 let testWindow;
 
-const openNewWindow = port => {
+const openNewWindow = async (port, revertBranch, path) => {
   console.log('Opening new window....');
-  console.log({ port });
+  console.log({ port, revertBranch, path });
   testWindow = new BrowserWindow({
     frame: true,
     show: true,
@@ -39,21 +39,22 @@ const openNewWindow = port => {
     testWindow.focus();
   });
 
-  testWindow.on('closed', () => {
+  testWindow.on('closed', async () => {
+    console.log('CLOSE TEST WINDOW');
     testWindow = null;
   });
 };
 
 const getCurrentGitBranch = async path => {
-  log(info('Getting current git branch'));
+  console.log('Getting current git branch');
   const repo = await simpleGit(path);
-  const branch = await repo.branch().current;
-  return branch;
+  const { current } = await repo.branch();
+  return current;
 };
 
 // const warnIfUncommittedChanges = async commit => {
 //   if (commit) {
-//     log(info('Checking to see if current branch has unstaged changes...'));
+//     console.log('Checking to see if current branch has unstaged changes...');
 //     const { stdout } = await exec('git diff-index --quiet HEAD -- || echo "untracked"  >&1');
 //     if (stdout) {
 //       throw new Error(`You have uncommitted changes which would be lost by creating a snapshot of a different branch \n
@@ -64,7 +65,7 @@ const getCurrentGitBranch = async path => {
 
 const revertGitCheckout = async (branch, path) => {
   if (branch) {
-    log(info(`Reverting back to previous branch: ${branch}`));
+    console.log(`Reverting back to previous branch: ${branch}`);
     const repo = await simpleGit(path);
     await repo.checkout(branch);
   }
@@ -100,11 +101,11 @@ const revertGitCheckout = async (branch, path) => {
 // const startServer = async serverFile => {
 //   const path = `${process.cwd()}/${serverFile}`;
 //   const server = await fork(path);
-//   log(info(server));
+//   console.log(server);
 //   runScript(serverFile, err => {
 //     if (err) throw err;
 //   });
-//   log(info('Custom Server started'));
+//   console.log('Custom Server started');
 // };
 
 const ignoreSnapshot = async path => {
@@ -113,15 +114,15 @@ const ignoreSnapshot = async path => {
   const theGitIgnorePath = `${`${path}/${name}`}`;
   const file = await readFile(theGitIgnorePath, 'utf8');
   const lines = file.split('\n');
-  const isIgnored = lines.find(x => x === 'snapshot');
+  const isIgnored = lines.find(x => x === 'snapshots');
   if (!isIgnored) {
-    log(info('Adding snapshot to gitignore...'));
+    console.log('Adding snapshot to gitignore...');
     await appendFile(`${`${path}/${name}`}`, '\nsnapshots\n');
     const repo = await simpleGit(path);
-    // const add = await repo.add('.gitignore');
-    // const commit = await repo.commit('added snapshot to .gitignore', '.gitignore');
+    await repo.add('.gitignore');
+    await repo.commit('added snapshot to .gitignore', '.gitignore');
   }
-  log(info('Snapshot directory added to gitignore'));
+  console.log('Snapshot directory added to gitignore');
 };
 
 // const useLocalServer = async server => {
@@ -129,23 +130,21 @@ const ignoreSnapshot = async path => {
 //   log('Custom server found, copying server');
 //   await copyServerFile(server);
 //   await startServer(server);
-//   log(info('Custom server started....'));
+//   console.log('Custom server started....');
 // };
 
 const checkoutGitCommit = async (path, commit, repo) => {
   if (commit) {
-    console.log({ path });
     const repo = await simpleGit(path);
     const checkout = await repo.checkout(commit);
-    console.log('Sucessfully checked out commit');
   }
 };
 
-const createLocalServer = async (dir, path) => {
+const createLocalServer = async (dir, path, currentBranch) => {
   separator();
   log('No custom server found, creating static hosted server');
   const PORT = await server(dir);
-  await openNewWindow(PORT);
+  await openNewWindow(PORT, currentBranch, path);
   log(go(`View local deploy here: http://localhost:${PORT}`));
 };
 
@@ -162,42 +161,33 @@ const runBuildStep = async (cmd, path) => {
 
 const copyBuildDir = async (output, path, commitId) => {
   separator();
-  log(info('Copying output directory...........!'));
+  console.log('Copying output directory...........!');
   const dir = `${path}/${TEMP_DIR}/${commitId}`;
   await copy(`${path}/${output}`, dir);
-  log(info('Directory copied!'));
+  console.log('Directory copied!');
   return dir;
 };
 
 const snapshot = async ({ state, dispatch }) => {
   const { git, project, commitsTable } = state;
   const { repo } = git;
+  // TODO: repo.cwd(workingDirectory), sets current working dir of repo.
   const { path } = project;
   const { row: { commitId } } = commitsTable;
   const snapshotJson = await readFile(`${`${path}/${ENV_PATH}`}`);
   const config = JSON.parse(snapshotJson);
   const { build, output } = config;
-  console.log('****************');
-  console.log({ repo, build, output });
   const currentBranch = await getCurrentGitBranch();
-  console.log({ currentBranch });
   try {
     await ignoreSnapshot(path);
-    await warnIfUncommittedChanges(commit);
-    const blob = await checkoutGitCommit(path, commitId, repo);
-    console.log('BLOB');
-    console.log({ blob });
+    // await warnIfUncommittedChanges(commit);
+    await checkoutGitCommit(path, commitId, repo);
     await runBuildStep(build, path);
     const directoryToHost = await copyBuildDir(output, path);
-    // // if (server) {
-    // //   await useLocalServer(server);
-    // // } else {
-    await createLocalServer(directoryToHost, path);
-    // }
+    await createLocalServer(directoryToHost, path, currentBranch);
   } catch (err) {
     log(error(err));
   } finally {
-    console.log('FINALLY');
     await revertGitCheckout(currentBranch, path);
   }
 };
