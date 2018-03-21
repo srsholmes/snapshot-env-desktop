@@ -83,12 +83,12 @@ export default class CommitsTable extends Component<Props> {
                   Header: 'Author',
                   id: 'author',
                   accessor: d => d.author
-                },
-                {
-                  Header: 'My notes',
-                  id: 'notes',
-                  Cell: this.renderEditable
                 }
+                // {
+                //   Header: 'My notes',
+                //   id: 'notes',
+                //   Cell: this.renderEditable
+                // }
               ]
             }
           ]}

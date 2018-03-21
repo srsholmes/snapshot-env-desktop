@@ -12,6 +12,8 @@ import { gitActions } from '../reducers/git';
 import { tableActions } from '../reducers/commitsTable';
 import { projectActions } from '../reducers/project';
 
+const simpleGit = require('simple-git/promise');
+
 const { dialog } = require('electron').remote;
 
 const iconStyle = {
@@ -26,9 +28,16 @@ class Homepage extends Component {
 
   handleChange = e => console.log(e.target.value);
 
-  handleClick = n => e => {
+  handleClick = n => async e => {
     const { actions: { setProjectPath, getRepoInfo } } = this.props;
     this.setState({ selected: n });
+    if (n === 3) {
+      const { project } = this.props;
+      const repo = await simpleGit(project.path);
+      const remote = await repo.listRemote();
+      await repo.fetch(remote);
+      return;
+    }
     dialog.showOpenDialog(
       { BrowserWindow: true, properties: ['openFile', 'openDirectory'] },
       ([path]) => {
@@ -40,6 +49,7 @@ class Homepage extends Component {
   };
 
   render() {
+    const { project: { path } } = this.props;
     return (
       <React.Fragment>
         <TitleBar controls inset title="Snapshot Env" />
@@ -55,24 +65,28 @@ class Homepage extends Component {
                   onClick={this.handleClick(1)}
                 />
               </div>
-              <div className={styles.icon}>
-                <ToolbarNavItem
-                  style={iconStyle}
-                  title="Clone Project"
-                  icon={<FontAwesomeIcon icon={['fal', 'code-branch']} />}
-                  selected={this.state.selected === 2}
-                  onClick={this.handleClick(2)}
-                />
-              </div>
-              <div className={styles.icon}>
-                <ToolbarNavItem
-                  style={iconStyle}
-                  title="Fetch"
-                  icon={<FontAwesomeIcon icon={['fal', 'code-branch']} />}
-                  selected={this.state.selected === 3}
-                  onClick={() => this.setState({ selected: 2 })}
-                />
-              </div>
+              {path && (
+                <div className={styles.icon}>
+                  <ToolbarNavItem
+                    style={iconStyle}
+                    title="Clone Project"
+                    icon={<FontAwesomeIcon icon={['fal', 'code-branch']} />}
+                    selected={this.state.selected === 2}
+                    onClick={this.handleClick(2)}
+                  />
+                </div>
+              )}
+              {path && (
+                <div className={styles.icon}>
+                  <ToolbarNavItem
+                    style={iconStyle}
+                    title="Fetch"
+                    icon={<FontAwesomeIcon icon={['fal', 'code-branch']} />}
+                    selected={this.state.selected === 3}
+                    onClick={this.handleClick(3)}
+                  />
+                </div>
+              )}
             </div>
           </ToolbarNav>
           <div className={styles.searchWrapper}>
