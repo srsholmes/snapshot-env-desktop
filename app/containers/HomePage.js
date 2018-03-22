@@ -90,6 +90,7 @@ class Homepage extends Component {
               )}
             </div>
           </ToolbarNav>
+          {/* TODO: Add in build and output folder text fields here */}
           {/* <div className={styles.searchWrapper}>
             <SearchField
               style={{ marginRight: '10px' }}

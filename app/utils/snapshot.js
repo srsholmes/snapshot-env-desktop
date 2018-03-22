@@ -2,43 +2,15 @@ import { ENV_PATH, TEMP_DIR } from '../utils/globals';
 import promisify from '../utils/promisify';
 
 const simpleGit = require('simple-git/promise');
-const { remote } = require('electron');
+const { remote, shell } = require('electron');
 const exec = promisify(require('child_process').exec);
 const {
   readFileSync, copy, exists, copyFile, readFile, appendFile
 } = require('fs-extra');
 const { server } = require('../../server');
 
-const { BrowserWindow } = remote;
 const { log } = console;
 const separator = () => log('*'.repeat(80));
-let testWindow;
-
-const openNewWindow = async (port, revertBranch, path) => {
-  log('Opening new window....');
-  log({ port, revertBranch, path });
-  testWindow = new BrowserWindow({
-    frame: true,
-    show: true,
-    width: 800,
-    height: 400
-  });
-
-  testWindow.loadURL(`http://localhost:${port}/`);
-
-  testWindow.webContents.on('did-finish-load', () => {
-    if (!testWindow) {
-      throw new Error('"testWindow" is not defined');
-    }
-    testWindow.show();
-    testWindow.focus();
-  });
-
-  testWindow.on('closed', async () => {
-    log('CLOSE TEST WINDOW');
-    testWindow = null;
-  });
-};
 
 const getCurrentGitBranch = async path => {
   log('Getting current git branch');
@@ -139,7 +111,7 @@ const createLocalServer = async (dir, path, currentBranch) => {
   separator();
   log('No custom server found, creating static hosted server');
   const PORT = await server(dir);
-  await openNewWindow(PORT, currentBranch, path);
+  shell.openExternal(`http://localhost:${PORT}`);
   log(`View local deploy here: http://localhost:${PORT}`);
 };
 
@@ -172,6 +144,7 @@ const snapshot = async ({ state, dispatch }) => {
   const { build, output } = config;
   console.log({ config });
   const currentBranch = await getCurrentGitBranch();
+  console.log({ currentBranch });
   try {
     // await ignoreSnapshot(path);
     // await warnIfUncommittedChanges(commit);
