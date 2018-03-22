@@ -140,7 +140,7 @@ const createLocalServer = async (dir, path, currentBranch) => {
   log('No custom server found, creating static hosted server');
   const PORT = await server(dir);
   await openNewWindow(PORT, currentBranch, path);
-  log(go(`View local deploy here: http://localhost:${PORT}`));
+  log(`View local deploy here: http://localhost:${PORT}`);
 };
 
 const runBuildStep = async (cmd, path) => {
@@ -167,14 +167,13 @@ const snapshot = async ({ state, dispatch }) => {
   const { git, project, commitsTable } = state;
   const { repo } = git;
   // TODO: repo.cwd(workingDirectory), sets current working dir of repo.
-  const { path } = project;
+  const { path, config } = project;
   const { row: { commitId } } = commitsTable;
-  const snapshotJson = await readFile(`${`${path}/${ENV_PATH}`}`);
-  const config = JSON.parse(snapshotJson);
   const { build, output } = config;
+  console.log({ config });
   const currentBranch = await getCurrentGitBranch();
   try {
-    await ignoreSnapshot(path);
+    // await ignoreSnapshot(path);
     // await warnIfUncommittedChanges(commit);
     await checkoutGitCommit(path, commitId, repo);
     await runBuildStep(build, path);
@@ -183,7 +182,7 @@ const snapshot = async ({ state, dispatch }) => {
   } catch (err) {
     log('ERROR', err);
   } finally {
-    await revertGitCheckout(currentBranch, path);
+    // await revertGitCheckout(currentBranch, path);
   }
 };
 export default snapshot;

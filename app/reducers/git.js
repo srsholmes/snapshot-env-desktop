@@ -58,7 +58,7 @@ export function getRepoInfo(path) {
   };
 }
 
-const runSnapshot = (commitId = '12345') => async (dispatch: action => void, getState) => {
+const runSnapshot = () => async (dispatch: action => void, getState) => {
   const state = getState();
 
   await snapshot({

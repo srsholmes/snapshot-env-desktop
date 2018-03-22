@@ -29,7 +29,7 @@ class Homepage extends Component {
   handleChange = e => console.log(e.target.value);
 
   handleClick = n => async e => {
-    const { actions: { setProjectPath, getRepoInfo } } = this.props;
+    const { actions: { setProjectPath, setConfigInfo, getRepoInfo } } = this.props;
     this.setState({ selected: n });
     if (n === 3) {
       const { project } = this.props;
@@ -44,6 +44,7 @@ class Homepage extends Component {
         this.setState({ selected: null });
         setProjectPath(path);
         getRepoInfo(path);
+        setConfigInfo(path);
       }
     );
   };
@@ -89,14 +90,14 @@ class Homepage extends Component {
               )}
             </div>
           </ToolbarNav>
-          <div className={styles.searchWrapper}>
+          {/* <div className={styles.searchWrapper}>
             <SearchField
               style={{ marginRight: '10px' }}
               placeholder="Search"
               defaultValue=""
               onChange={this.handleChange}
             />
-          </div>
+          </div> */}
         </Toolbar>
         <CommitsTable {...this.props} />
         <Footer {...this.props} />
