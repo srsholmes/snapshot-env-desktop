@@ -2,35 +2,6 @@
 import snapshot from '../utils/snapshot';
 
 const simpleGit = require('simple-git/promise');
-const Chance = require('chance');
-
-const c = new Chance();
-
-const getRandomNote = arr => {
-  let copy = arr.slice(0);
-  return function () {
-    if (copy.length < 1) {
-      copy = arr.slice(0);
-    }
-    const index = Math.floor(Math.random() * copy.length);
-    const item = copy[index];
-    copy.splice(index, 1);
-    return item;
-  };
-};
-
-const NOTES = [
-  'Looks great 😊',
-  'Needs more work',
-  'Broken on Android 😕',
-  'Header needs tweaking',
-  'Crashed my chrome',
-  'Ship it',
-  'Has been reviewed 😊',
-  `See jira VP-${c.integer({ min: 100, max: 150 })}`,
-  'Love it ❤️'
-];
-const randomComment = getRandomNote(NOTES);
 
 export function getRepoInfo(path) {
   return async (dispatch: action => void) => {
@@ -43,8 +14,7 @@ export function getRepoInfo(path) {
       commitMessage: x.message,
       commitDate: x.date,
       author: x.author_name,
-      authorEmail: x.author_email,
-      notes: randomComment()
+      authorEmail: x.author_email
     }));
 
     return dispatch({
