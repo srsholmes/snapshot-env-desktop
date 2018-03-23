@@ -50,7 +50,7 @@ export function getRepoInfo(path) {
     return dispatch({
       type: 'SETTING_REPO_INFO',
       payload: {
-        branch,
+        currentBranch: branch.current,
         commits,
         repo
       }
@@ -83,7 +83,8 @@ export default function gitReducer(state = initialState, action) {
       return {
         ...state,
         commits: action.payload.commits,
-        repo: action.payload.repo
+        repo: action.payload.repo,
+        currentBranch: action.payload.currentBranch
       };
     default:
       return state;

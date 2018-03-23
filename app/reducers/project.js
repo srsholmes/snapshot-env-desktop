@@ -41,7 +41,11 @@ const setConfigInfo = path => async (dispatch: action => void) => {
 };
 
 const initialState = {
-  path: null
+  path: null,
+  config: {
+    build: null,
+    output: null
+  }
 };
 
 export default function project(state = initialState, action) {

@@ -12,13 +12,6 @@ const { server } = require('../../server');
 const { log } = console;
 const separator = () => log('*'.repeat(80));
 
-const getCurrentGitBranch = async path => {
-  log('Getting current git branch');
-  const repo = await simpleGit(path);
-  const { current } = await repo.branch();
-  return current;
-};
-
 // const warnIfUncommittedChanges = async commit => {
 //   if (commit) {
 //     log('Checking to see if current branch has unstaged changes...');
@@ -29,14 +22,6 @@ const getCurrentGitBranch = async path => {
 //     }
 //   }
 // };
-
-const revertGitCheckout = async (branch, path) => {
-  if (branch) {
-    log(`Reverting back to previous branch: ${branch}`);
-    const repo = await simpleGit(path);
-    await repo.checkout(branch);
-  }
-};
 
 // const copyServerFile = async serverFile => {
 //   const path = `${process.cwd()}/${serverFile}`;
@@ -107,7 +92,7 @@ const checkoutGitCommit = async (path, commit, repo) => {
   }
 };
 
-const createLocalServer = async (dir, path, currentBranch) => {
+const createLocalServer = async dir => {
   separator();
   log('No custom server found, creating static hosted server');
   const PORT = await server(dir);
@@ -135,27 +120,33 @@ const copyBuildDir = async (output, path, commitId) => {
   return dir;
 };
 
+const revertGitCheckout = async (branch, repo) => {
+  log(`Reverting back to previous branch: ${branch}`);
+  console.log({ repo, branch });
+  await repo.checkout(branch);
+};
+
 const snapshot = async ({ state, dispatch }) => {
   const { git, project, commitsTable } = state;
-  const { repo } = git;
+  const { repo, currentBranch } = git;
+
   // TODO: repo.cwd(workingDirectory), sets current working dir of repo.
   const { path, config } = project;
   const { row: { commitId } } = commitsTable;
   const { build, output } = config;
   console.log({ config });
-  const currentBranch = await getCurrentGitBranch();
-  console.log({ currentBranch });
+
   try {
-    // await ignoreSnapshot(path);
+    await ignoreSnapshot(path);
     // await warnIfUncommittedChanges(commit);
     await checkoutGitCommit(path, commitId, repo);
     await runBuildStep(build, path);
     const directoryToHost = await copyBuildDir(output, path);
-    await createLocalServer(directoryToHost, path, currentBranch);
+    await createLocalServer(directoryToHost);
   } catch (err) {
     log('ERROR', err);
   } finally {
-    // await revertGitCheckout(currentBranch, path);
+    await revertGitCheckout(currentBranch, repo);
   }
 };
 export default snapshot;

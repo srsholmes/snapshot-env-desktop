@@ -10,3 +10,9 @@
 
   align-items: flex-end;
 }
+
+.controls {
+  width: 50%;
+  align-self: flex-end;
+  background: red;
+}
