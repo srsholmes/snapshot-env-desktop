@@ -9,13 +9,11 @@ import CommitsTable from '../components/CommitsTable';
 import Toolbar from '../components/Toolbar';
 import styles from './Toolbar.css';
 import Footer from '../components/Footer';
-
 import { gitActions } from '../reducers/git';
 import { tableActions } from '../reducers/commitsTable';
 import { projectActions } from '../reducers/project';
 
 const simpleGit = require('simple-git/promise');
-
 const { dialog } = require('electron').remote;
 
 const iconStyle = {

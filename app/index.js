@@ -5,7 +5,8 @@ import Root from './containers/Root';
 import fontIcons from './utils/fontIcon';
 import { configureStore, history } from './store/configureStore';
 import './app.global.css';
-import { setProjectPath } from './reducers/project';
+import { setProjectPath, setConfigInfo } from './reducers/project';
+import { getRepoInfo } from './reducers/git';
 
 document.ondragover = document.ondrop = ev => {
   ev.preventDefault();
@@ -16,6 +17,8 @@ const store = configureStore();
 document.body.ondrop = ev => {
   const { path } = ev.dataTransfer.files[0];
   store.dispatch(setProjectPath(path));
+  store.dispatch(getRepoInfo(path));
+  store.dispatch(setConfigInfo(path));
   ev.preventDefault();
 };
 
