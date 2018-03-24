@@ -5,8 +5,19 @@ import Root from './containers/Root';
 import fontIcons from './utils/fontIcon';
 import { configureStore, history } from './store/configureStore';
 import './app.global.css';
+import { setProjectPath } from './reducers/project';
+
+document.ondragover = document.ondrop = ev => {
+  ev.preventDefault();
+};
 
 const store = configureStore();
+
+document.body.ondrop = ev => {
+  const { path } = ev.dataTransfer.files[0];
+  store.dispatch(setProjectPath(path));
+  ev.preventDefault();
+};
 
 render(
   <AppContainer>

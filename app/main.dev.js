@@ -15,7 +15,6 @@ import MenuBuilder from './menu';
 
 const reload = () => {
   const currentWin = getCurrentWindow();
-  console.log({ currentWin });
   currentWin.reload();
 };
 

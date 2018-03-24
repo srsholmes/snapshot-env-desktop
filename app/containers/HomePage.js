@@ -56,6 +56,7 @@ class Homepage extends Component {
     return (
       <React.Fragment>
         <Toolbar />
+        {!path && <p>Drag a folder onto the window to get started</p>}
         <CommitsTable {...this.props} />
         <Footer {...this.props} />
       </React.Fragment>
