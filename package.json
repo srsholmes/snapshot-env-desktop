@@ -5,7 +5,7 @@
   "description":
     "Electron application boilerplate based on React, React Router, Webpack, React Hot Loader for rapid application development",
   "scripts": {
-    "build-css": "node-sass-chokidar --include-path ./node_modules app/ -o app/",
+    "build-md-css": "node-sass --include-path ./node_modules app/ -o app/",
     "build": "concurrently \"npm run build-main\" \"npm run build-renderer\"",
     "build-dll":
       "cross-env NODE_ENV=development node --trace-warnings -r babel-register ./node_modules/webpack/bin/webpack --config webpack.config.renderer.dev.dll.js --colors",
@@ -14,7 +14,7 @@
     "build-renderer":
       "cross-env NODE_ENV=production node --trace-warnings -r babel-register ./node_modules/webpack/bin/webpack --config webpack.config.renderer.prod.js --colors",
     "dev":
-      "cross-env START_HOT=1 node -r babel-register ./internals/scripts/CheckPortInUse.js && cross-env START_HOT=1 npm run start-renderer-dev && npm run watch-css",
+      "cross-env START_HOT=1 node -r babel-register ./internals/scripts/CheckPortInUse.js && cross-env START_HOT=1 npm run start-renderer-dev",
     "electron-rebuild":
       "electron-rebuild --parallel --force --types prod,dev,optional --module-dir app",
     "flow": "flow",
