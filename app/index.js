@@ -5,6 +5,9 @@ import Root from './containers/Root';
 import fontIcons from './utils/fontIcon';
 import { configureStore, history } from './store/configureStore';
 import './app.global.css';
+import 'font-awesome/css/font-awesome.min.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'mdbreact/dist/css/mdb.css';
 
 const store = configureStore();
 
