@@ -26,6 +26,14 @@ import faVenus from '@fortawesome/fontawesome-pro-light/faVenus';
 import faVenusMars from '@fortawesome/fontawesome-pro-light/faVenusMars';
 import faSpinner from '@fortawesome/fontawesome-pro-light/faSpinner';
 
+import WebFontLoader from 'webfontloader';
+
+WebFontLoader.load({
+  google: {
+    families: ['Roboto:300,400,500,700', 'Material Icons']
+  }
+});
+
 fontawesome.library.add(
   faOpenFolder,
   faCodeBranch,
