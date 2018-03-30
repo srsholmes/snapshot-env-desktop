@@ -1,0 +1,10 @@
+.container {
+  position: absolute;
+  bottom: 5%;
+  right: 5%;
+}
+
+.openProjectButton {
+  height: 70px;
+  width: 70px;
+}

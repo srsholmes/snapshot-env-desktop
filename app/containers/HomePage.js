@@ -1,36 +1,29 @@
 // @flow
 import React, { Component } from 'react';
-import { connect, type MapStateToProps, type MapDispatchToProps } from 'react-redux';
+import {
+  connect,
+  type MapStateToProps,
+  type MapDispatchToProps,
+} from 'react-redux';
 import { bindActionCreators } from 'redux';
-
-import { TitleBar } from 'react-desktop/macOs';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+import simpleGit from 'simple-git';
 import CommitsTable from '../components/CommitsTable';
 import Toolbar from '../components/Toolbar';
-import styles from './Toolbar.css';
 import Footer from '../components/Footer';
+import Fabs from '../components/Fabs';
 import { gitActions } from '../reducers/git';
 import { tableActions } from '../reducers/commitsTable';
 import { projectActions } from '../reducers/project';
+import { openProjectWindow } from '../utils/fileUtils';
 
-const simpleGit = require('simple-git/promise');
-const { dialog } = require('electron').remote;
-
-const iconStyle = {
-  width: 70
-};
 
 class Homepage extends Component {
-  constructor() {
-    super();
-    this.state = { selected: null };
-  }
-
   handleChange = e => console.log(e.target.value);
 
   handleClick = n => async e => {
-    const { actions: { setProjectPath, setConfigInfo, getRepoInfo } } = this.props;
-    this.setState({ selected: n });
+    const {
+      actions: { setProjectPath, setConfigInfo, getRepoInfo },
+    } = this.props;
     if (n === 3) {
       const { project } = this.props;
       const repo = await simpleGit(project.path);
@@ -38,34 +31,35 @@ class Homepage extends Component {
       await repo.fetch(remote);
       return;
     }
-    dialog.showOpenDialog(
-      { BrowserWindow: true, properties: ['openFile', 'openDirectory'] },
-      ([path]) => {
-        this.setState({ selected: null });
-        setProjectPath(path);
-        getRepoInfo(path);
-        setConfigInfo(path);
-      }
-    );
+    openProjectWindow([setProjectPath, getRepoInfo, setConfigInfo]);
   };
 
   render() {
     const { project: { path } } = this.props;
     return (
       <React.Fragment>
-        <Toolbar />
+        <Toolbar {...this.props} />
         {!path && <p>Drag a folder onto the window to get started</p>}
         <CommitsTable {...this.props} />
+        <Fabs {...this.props} />
         <Footer {...this.props} />
       </React.Fragment>
     );
   }
 }
 
-const mapDispatchToProps: MapDispatchToProps<Action, OwnProps, DispatchProps> = dispatch => ({
-  actions: bindActionCreators({ ...tableActions, ...gitActions, ...projectActions }, dispatch)
+const mapDispatchToProps: MapDispatchToProps<
+  Action,
+  OwnProps,
+  DispatchProps
+> = dispatch => ({
+  actions: bindActionCreators(
+    { ...tableActions, ...gitActions, ...projectActions },
+    dispatch
+  ),
 });
 
-const mapStateToProps: MapStateToProps<State, OwnProps, StateProps> = state => state;
+const mapStateToProps: MapStateToProps<State, OwnProps, StateProps> = state =>
+  state;
 
 export default connect(mapStateToProps, mapDispatchToProps)(Homepage);
