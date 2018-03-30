@@ -8,13 +8,13 @@ export function setProjectPath(path) {
   return {
     type: 'SET_PROJECT_PATH',
     payload: {
-      path
-    }
+      path,
+    },
   };
 }
 const DEFAULT_CONFIG = {
   build: 'npm run build',
-  output: 'public'
+  output: 'public',
 };
 const setConfigInfo = path => async (dispatch: action => void) => {
   let config = DEFAULT_CONFIG;
@@ -27,15 +27,15 @@ const setConfigInfo = path => async (dispatch: action => void) => {
     return dispatch({
       type: 'SET_CONFIG_INFO',
       payload: {
-        config: config || DEFAULT_CONFIG
-      }
+        config: config || DEFAULT_CONFIG,
+      },
     });
   } catch (error) {
     return dispatch({
       type: 'SET_CONFIG_INFO',
       payload: {
-        config: config || DEFAULT_CONFIG
-      }
+        config: config || DEFAULT_CONFIG,
+      },
     });
   }
 };
@@ -44,8 +44,8 @@ const initialState = {
   path: null,
   config: {
     build: null,
-    output: null
-  }
+    output: null,
+  },
 };
 
 export default function project(state = initialState, action) {
@@ -61,7 +61,7 @@ export default function project(state = initialState, action) {
 
 const projectActions = {
   setProjectPath,
-  setConfigInfo
+  setConfigInfo,
 };
 
 export { projectActions };

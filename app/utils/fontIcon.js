@@ -14,7 +14,7 @@ import faMars from '@fortawesome/fontawesome-pro-light/faMars';
 import faSearch from '@fortawesome/fontawesome-pro-light/faSearch';
 import faCopy from '@fortawesome/fontawesome-pro-light/faCopy';
 import faFrown from '@fortawesome/fontawesome-pro-light/faFrown';
-
+import faPlay from '@fortawesome/fontawesome-pro-light/faPlay';
 import faShare from '@fortawesome/fontawesome-pro-light/faShare';
 import faShareAlt from '@fortawesome/fontawesome-pro-light/faShareAlt';
 import faSignInAlt from '@fortawesome/fontawesome-pro-light/faSignInAlt';
@@ -35,6 +35,7 @@ WebFontLoader.load({
 });
 
 fontawesome.library.add(
+  faPlay ,
   faOpenFolder,
   faCodeBranch,
   faCopy,

@@ -1,8 +1,8 @@
 // @flow
 import React, { Component } from 'react';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
-import styles from './Fabs.css';
 import Button from 'material-ui/Button';
+import styles from './Fabs.css';
 import { openProjectWindow } from '../utils/fileUtils';
 
 export default class Fabs extends Component<Props> {
@@ -35,7 +35,7 @@ export default class Fabs extends Component<Props> {
             openProjectWindow([setProjectPath, setConfigInfo, getRepoInfo])
           }
         >
-          <FontAwesomeIcon size="lg" icon={['fal', 'folder-open']} />
+          <FontAwesomeIcon size="lg" icon={['fa', 'play']} />
         </Button>
       </div>
     );
