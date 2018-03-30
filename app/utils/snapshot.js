@@ -1,12 +1,11 @@
-import { ENV_PATH, TEMP_DIR } from '../utils/globals';
+// @flow
+import { TEMP_DIR } from '../utils/globals';
 import promisify from '../utils/promisify';
 
 const simpleGit = require('simple-git/promise');
-const { remote, shell } = require('electron');
+const { shell } = require('electron');
 const exec = promisify(require('child_process').exec);
-const {
-  readFileSync, copy, exists, copyFile, readFile, appendFile
-} = require('fs-extra');
+const { copy, readFile, appendFile } = require('fs-extra');
 const { server } = require('../../server');
 
 const { log } = console;
@@ -21,43 +20,6 @@ const separator = () => log('*'.repeat(80));
 //         Please either stash or commit your changes before creating a snapshot of a specific commit.`);
 //     }
 //   }
-// };
-
-// const copyServerFile = async serverFile => {
-//   const path = `${process.cwd()}/${serverFile}`;
-//   const serverExists = await exists(path);
-//   if (serverExists) {
-//     await copyFile(serverFile, `${process.cwd()}/${SNAPSHOT}/${serverFile}`);
-//   } else {
-//     throw new Error('Specified server in config not found');
-//   }
-// };
-
-// function runScript(scriptPath, cb) {
-//   let invoked = false;
-//   const process = fork(scriptPath);
-//   process.on('error', err => {
-//     if (invoked) return;
-//     invoked = true;
-//     cb(err);
-//   });
-
-//   process.on('exit', code => {
-//     if (invoked) return;
-//     invoked = true;
-//     const err = code === 0 ? null : new Error(`exit code ${code}`);
-//     cb(err);
-//   });
-// }
-
-// const startServer = async serverFile => {
-//   const path = `${process.cwd()}/${serverFile}`;
-//   const server = await fork(path);
-//   log(server);
-//   runScript(serverFile, err => {
-//     if (err) throw err;
-//   });
-//   log('Custom Server started');
 // };
 
 const ignoreSnapshot = async path => {
@@ -105,7 +67,7 @@ const runBuildStep = async (cmd, path) => {
   log('Running build process...');
   log({ cmd, path });
   const { stdout, stderr } = await exec(`${cmd} --prefix ${path}`, {
-    maxBuffer: 1024 * 8000
+    maxBuffer: 1024 * 8000,
   });
   log(('Output:', stdout));
   log('stderr:', stderr);
@@ -132,14 +94,14 @@ const snapshot = async ({ state, dispatch }) => {
 
   // TODO: repo.cwd(workingDirectory), sets current working dir of repo.
   const { path, config } = project;
-  const { row: { commitId } } = commitsTable;
+  const { selectedCommit } = commitsTable;
   const { build, output } = config;
   console.log({ config });
 
   try {
     await ignoreSnapshot(path);
     // await warnIfUncommittedChanges(commit);
-    await checkoutGitCommit(path, commitId, repo);
+    await checkoutGitCommit(path, selectedCommit, repo);
     await runBuildStep(build, path);
     const directoryToHost = await copyBuildDir(output, path);
     await createLocalServer(directoryToHost);

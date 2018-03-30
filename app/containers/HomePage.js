@@ -7,7 +7,7 @@ import {
 } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import simpleGit from 'simple-git';
-import CommitsTable from '../components/CommitsTable';
+import CommitsTable from '../components/CommitsTable/CommitsTable';
 import Toolbar from '../components/Toolbar';
 import Footer from '../components/Footer';
 import Fabs from '../components/Fabs';
@@ -42,7 +42,7 @@ class Homepage extends Component {
         {!path && <p>Drag a folder onto the window to get started</p>}
         <CommitsTable {...this.props} />
         <Fabs {...this.props} />
-        <Footer {...this.props} />
+        {/*<Footer {...this.props} />*/}
       </React.Fragment>
     );
   }
