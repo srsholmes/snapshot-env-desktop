@@ -48,7 +48,7 @@ class EnhancedTable extends React.Component {
     }
 
     this.setState({ order, orderBy });
-    actions.sortTableRow(order, order);
+    actions.sortTableRow(orderBy, order);
   };
 
   handleClick = (event, id) => {
@@ -59,6 +59,7 @@ class EnhancedTable extends React.Component {
     this.setState({ selected: isSelected ? [] : [id] });
     setActiveRow(id);
   };
+
   handleChangePage = (event, page) => {
     this.setState({ page });
   };

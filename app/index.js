@@ -7,12 +7,13 @@ import { configureStore, history } from './store/configureStore';
 import './app.global.css';
 import { setProjectPath, setConfigInfo } from './reducers/project';
 import { getRepoInfo } from './reducers/git';
+import initialState from './store/example-state';
 
 document.ondragover = document.ondrop = ev => {
   ev.preventDefault();
 };
 
-const store = configureStore();
+const store = configureStore(initialState);
 
 document.body.ondrop = ev => {
   const { path } = ev.dataTransfer.files[0];
