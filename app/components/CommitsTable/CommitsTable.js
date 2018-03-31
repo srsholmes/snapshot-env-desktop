@@ -119,18 +119,6 @@ const styles = theme => ({
     width: '100%',
     marginTop: '5%',
   },
-  table: {
-    minWidth: 800,
-  },
-  textField: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
-    width: 200,
-    paddingBottom: 20,
-  },
-  tableWrapper: {
-    overflowX: 'auto',
-  },
 });
 
 export default withStyles(styles)(EnhancedTable);
