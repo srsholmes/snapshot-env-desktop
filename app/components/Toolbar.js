@@ -21,27 +21,8 @@ const styles = {
 };
 
 class ButtonAppBar extends React.Component {
-  state = {
-    auth: true,
-    anchorEl: null,
-  };
-
-  handleChange = (event, checked) => {
-    this.setState({ auth: checked });
-  };
-
-  handleMenu = event => {
-    this.setState({ anchorEl: event.currentTarget });
-  };
-
-  handleClose = () => {
-    this.setState({ anchorEl: null });
-  };
-
   render() {
     const { classes, actions } = this.props;
-    const { auth, anchorEl } = this.state;
-    const open = Boolean(anchorEl);
     return (
       <div className={classes.root}>
         <AppBar position="fixed">
@@ -51,7 +32,7 @@ class ButtonAppBar extends React.Component {
               color="inherit"
               aria-label="Menu"
             >
-              <MenuIcon onClick={() => actions.toggleDrawer()}/>
+              <MenuIcon onClick={() => actions.toggleDrawer()} />
             </IconButton>
             <Typography
               variant="title"
@@ -60,23 +41,6 @@ class ButtonAppBar extends React.Component {
             >
               Snapshot Env
             </Typography>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorEl}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={open}
-              onClose={this.handleClose}
-            >
-              <MenuItem onClick={this.handleClose}>Profile</MenuItem>
-              <MenuItem onClick={this.handleClose}>My account</MenuItem>
-            </Menu>
           </Toolbar>
         </AppBar>
       </div>

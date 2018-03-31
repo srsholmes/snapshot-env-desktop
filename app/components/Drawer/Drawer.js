@@ -1,73 +1,99 @@
 import React from 'react';
 import { withStyles } from 'material-ui/styles';
 import Drawer from 'material-ui/Drawer';
+import { CircularProgress } from 'material-ui/Progress';
 import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
-import StarIcon from 'material-ui-icons/Star';
-import SendIcon from 'material-ui-icons/Send';
-import SettingsIcon from 'material-ui-icons/Settings';
+import simpleGit from 'simple-git/promise';
 import { openProjectWindow } from '../../utils/fileUtils';
 
 const DRAWER_WIDTH = 270;
-function ClippedDrawer(props) {
-  const { classes, global, actions } = props;
-  const { setProjectPath, setConfigInfo, getRepoInfo } = actions;
-  const { drawer } = global;
-  return (
-    <div className={classes.root}>
-      <div
-        className={classes.drawerWrapper}
-        style={{ marginLeft: drawer.open ? 0 : -DRAWER_WIDTH }}
-      >
-        <Drawer
-          variant="permanent"
-          classes={{
-            paper: classes.drawerPaper,
-          }}
+class ClippedDrawer extends React.Component {
+  state = {
+    loading: false,
+  };
+
+  fetchRepo = async () => {
+    const { project } = this.props;
+    this.setState({ loading: true });
+    const repo = await simpleGit(project.path);
+    const remote = await repo.listRemote();
+    await repo.fetch(remote);
+    this.setState({ loading: false });
+  };
+
+  render() {
+    const { classes, global, actions, project } = this.props;
+    const { setProjectPath, setConfigInfo, getRepoInfo } = actions;
+    const { drawer } = global;
+    return (
+      <div className={classes.root}>
+        <div
+          className={classes.drawerWrapper}
+          style={{ marginLeft: drawer.open ? 0 : -DRAWER_WIDTH }}
         >
-          <div className={classes.toolbar} />
-          <List>
-            <div>
-              <ListItem
-                button
-                onClick={() =>
-                  openProjectWindow([
-                    setProjectPath,
-                    setConfigInfo,
-                    getRepoInfo,
-                  ])
-                }
-              >
-                <ListItemIcon>
-                  <FontAwesomeIcon size="lg" icon={['fal', 'folder-open']} />
-                </ListItemIcon>
-                <ListItemText primary="Open Project" />
-              </ListItem>
-              <ListItem button>
-                <ListItemIcon>
-                  <FontAwesomeIcon size="lg" icon={['fal', 'code-branch']} />
-                </ListItemIcon>
-                <ListItemText primary="Clone Project" />
-              </ListItem>
-              <ListItem button>
-                <ListItemIcon>
-                  <FontAwesomeIcon size="lg" icon={['fal', 'code-branch']} />
-                </ListItemIcon>
-                <ListItemText primary="Fetch Project" />
-              </ListItem>
-              <ListItem button>
-                <ListItemIcon>
-                  <FontAwesomeIcon size="lg" icon={['fal', 'cog']} />
-                </ListItemIcon>
-                <ListItemText primary="Settings" />
-              </ListItem>
-            </div>
-          </List>
-        </Drawer>
+          <Drawer
+            variant="permanent"
+            classes={{
+              paper: classes.drawerPaper,
+            }}
+          >
+            <div className={classes.toolbar} />
+            <List>
+              <div>
+                <ListItem
+                  button
+                  onClick={() =>
+                    openProjectWindow([
+                      setProjectPath,
+                      setConfigInfo,
+                      getRepoInfo,
+                    ])
+                  }
+                >
+                  <ListItemIcon>
+                    <FontAwesomeIcon size="lg" icon={['fal', 'folder-open']} />
+                  </ListItemIcon>
+                  <ListItemText primary="Open Project" />
+                </ListItem>
+                <ListItem button>
+                  <ListItemIcon>
+                    <FontAwesomeIcon size="lg" icon={['fal', 'code-branch']} />
+                  </ListItemIcon>
+                  <ListItemText primary="Clone Project" />
+                </ListItem>
+                {project.path && (
+                  <ListItem button onClick={this.fetchRepo}>
+                    <ListItemIcon>
+                      {this.state.loading ? (
+                        <CircularProgress
+                          size={25}
+                          className={classes.progress}
+                        />
+                      ) : (
+                        <FontAwesomeIcon
+                          size="lg"
+                          icon={['fal', 'code-branch']}
+                        />
+                      )}
+                    </ListItemIcon>
+                    <ListItemText primary="Fetch Current Project" />
+                  </ListItem>
+                )}
+                <ListItem button>
+                  <ListItemIcon>
+                    <FontAwesomeIcon size="lg" icon={['fal', 'cog']} />
+                  </ListItemIcon>
+                  <ListItemText primary="Settings" />
+                </ListItem>
+              </div>
+            </List>
+          </Drawer>
+        </div>
+        <main className={classes.content}>{this.props.children}</main>
       </div>
-      <main className={classes.content}>{props.children}</main>
-    </div>
-  );
+    );
+  }
 }
 
 const styles = theme => ({
