@@ -15,7 +15,7 @@ import Head from './Head';
 const styles = theme => ({
   root: {
     width: '100%',
-    marginTop: theme.spacing.unit * 3,
+    marginTop: '5%'
   },
   table: {
     minWidth: 800,

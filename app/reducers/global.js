@@ -4,7 +4,7 @@ const SNAPSHOT_TASKS_LENGTH = 11;
 
 const openModal = () => async (dispatch: action => void) => {
   return dispatch({
-    type: 'OPEN_GLOABL_MODAL',
+    type: 'OPEN_GLOBAL_MODAL',
     payload: {
       content: 'Hello Simon',
     },
@@ -13,7 +13,7 @@ const openModal = () => async (dispatch: action => void) => {
 
 const closeModal = () => async (dispatch: action => void) => {
   return dispatch({
-    type: 'CLOSE_GLOABL_MODAL',
+    type: 'CLOSE_GLOBAL_MODAL',
     payload: {
       content: 'Hello Simon',
     },
@@ -21,7 +21,7 @@ const closeModal = () => async (dispatch: action => void) => {
 };
 
 const setSnapshotMessage = (msg, progress) => async (dispatch, getState) => {
-  console.log(getState());
+  // console.log(getState());
   return dispatch({
     type: 'SET_GLOBAL_SNAPSHOT_MESSAGE',
     payload: {
@@ -31,7 +31,19 @@ const setSnapshotMessage = (msg, progress) => async (dispatch, getState) => {
   });
 };
 
+const toggleDrawer = () => async (dispatch: action, getState) => {
+  const state = getState();
+  const { open } = state.global.drawer;
+
+  return dispatch({
+    type: open ? 'CLOSE_DRAWER' : 'OPEN_DRAWER',
+  });
+};
+
 const initialState = {
+  drawer: {
+    open: false,
+  },
   modal: {
     display: false,
     message: {
@@ -48,7 +60,13 @@ const initialState = {
 
 export default function global(state = initialState, action) {
   switch (action.type) {
-    case 'OPEN_GLOABL_MODAL':
+    case 'OPEN_DRAWER': {
+      return { ...state, drawer: { open: true } };
+    }
+    case 'CLOSE_DRAWER': {
+      return { ...state, drawer: { open: false } };
+    }
+    case 'OPEN_GLOBAL_MODAL':
       return {
         ...state,
         modal: {
@@ -60,7 +78,7 @@ export default function global(state = initialState, action) {
           },
         },
       };
-    case 'CLOSE_GLOABL_MODAL':
+    case 'CLOSE_GLOBAL_MODAL':
       return {
         ...state,
         modal: {
@@ -86,6 +104,7 @@ export default function global(state = initialState, action) {
 const globalActions = {
   openModal,
   closeModal,
+  toggleDrawer,
   setSnapshotMessage,
 };
 

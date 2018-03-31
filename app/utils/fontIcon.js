@@ -1,6 +1,7 @@
 import fontawesome from '@fortawesome/fontawesome';
 import faCodeBranch from '@fortawesome/fontawesome-pro-light/faCodeBranch';
 import faOpenFolder from '@fortawesome/fontawesome-pro-light/faFolderOpen';
+import faCog from  '@fortawesome/fontawesome-pro-light/faCog';
 import faWhatsapp from '@fortawesome/fontawesome-free-brands/faWhatsapp';
 import faFacebook from '@fortawesome/fontawesome-free-brands/faFacebook';
 import faBars from '@fortawesome/fontawesome-free-solid/faBars';
@@ -25,7 +26,6 @@ import faUsers from '@fortawesome/fontawesome-pro-light/faUsers';
 import faVenus from '@fortawesome/fontawesome-pro-light/faVenus';
 import faVenusMars from '@fortawesome/fontawesome-pro-light/faVenusMars';
 import faSpinner from '@fortawesome/fontawesome-pro-light/faSpinner';
-
 import WebFontLoader from 'webfontloader';
 
 WebFontLoader.load({
@@ -39,6 +39,7 @@ fontawesome.library.add(
   faOpenFolder,
   faCodeBranch,
   faCopy,
+  faCog,
   faFrown,
   faWhatsapp,
   faFacebook,

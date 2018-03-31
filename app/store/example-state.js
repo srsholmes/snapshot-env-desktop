@@ -1,7 +1,7 @@
 const state = {
   commitsTable: {
     selectedRow: null,
-    selectedCommit: '52730b1f4a100df04d0a0f0458219bea326c4455',
+    selectedCommit: '6be574aed621ec5634b24de19a40fa3822e07dc0',
     commits: [
       {
         id: '6e3c4c59eed01fee6c574584dab75da33028e076',
@@ -172,6 +172,13 @@ const state = {
         authorEmail: 'srsholmes@gmail.com',
       },
     ],
+    order: 'asc',
+    orderBy: 'commitDate',
+    selected: ['6be574aed621ec5634b24de19a40fa3822e07dc0'],
+    page: 0,
+    rowsPerPage: 10,
+    currentBranch: '6e3c4c5',
+    repo: {},
   },
   git: {
     branch: null,
@@ -378,5 +385,4 @@ const state = {
     },
   },
 };
-
 export default state;

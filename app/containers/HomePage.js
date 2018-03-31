@@ -9,14 +9,14 @@ import { bindActionCreators } from 'redux';
 import simpleGit from 'simple-git';
 import CommitsTable from '../components/CommitsTable/CommitsTable';
 import Toolbar from '../components/Toolbar';
-import Modal from '../components/Modal'
+import Drawer from '../components/Drawer/Drawer';
+import Modal from '../components/Modal';
 import Fabs from '../components/Fabs';
 import { gitActions } from '../reducers/git';
 import { tableActions } from '../reducers/commitsTable';
 import { projectActions } from '../reducers/project';
 import { openProjectWindow } from '../utils/fileUtils';
 import { globalActions } from '../reducers/global';
-
 
 class Homepage extends Component {
   handleChange = e => console.log(e.target.value);
@@ -40,10 +40,12 @@ class Homepage extends Component {
     return (
       <React.Fragment>
         <Toolbar {...this.props} />
-        {!path && <p>Drag a folder onto the window to get started</p>}
-        <CommitsTable {...this.props} />
-        <Fabs {...this.props} />
-        <Modal {...this.props}/>
+        <Drawer {...this.props}>
+          {!path && <p>Drag a folder onto the window to get started</p>}
+          <CommitsTable {...this.props} />
+          <Fabs {...this.props} />
+          <Modal {...this.props} />
+        </Drawer>
       </React.Fragment>
     );
   }
@@ -55,7 +57,7 @@ const mapDispatchToProps: MapDispatchToProps<
   DispatchProps
 > = dispatch => ({
   actions: bindActionCreators(
-    { ...tableActions, ...gitActions, ...projectActions, ...globalActions},
+    { ...tableActions, ...gitActions, ...projectActions, ...globalActions },
     dispatch
   ),
 });

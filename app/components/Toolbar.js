@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
@@ -40,19 +39,19 @@ class ButtonAppBar extends React.Component {
   };
 
   render() {
-    const { classes } = this.props;
+    const { classes, actions } = this.props;
     const { auth, anchorEl } = this.state;
     const open = Boolean(anchorEl);
     return (
       <div className={classes.root}>
-        <AppBar position="static">
+        <AppBar position="fixed">
           <Toolbar>
             <IconButton
               className={classes.menuButton}
               color="inherit"
               aria-label="Menu"
             >
-              <MenuIcon />
+              <MenuIcon onClick={() => actions.toggleDrawer()}/>
             </IconButton>
             <Typography
               variant="title"
