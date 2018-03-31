@@ -19,7 +19,7 @@ export default class Fabs extends Component<Props> {
             color="primary"
             aria-label="add"
           >
-            <FontAwesomeIcon size="lg" icon={['fal', 'heart']} />
+            <FontAwesomeIcon size="lg" icon={['fal', 'play']} />
           </Button>
         </div>
       );
@@ -35,7 +35,7 @@ export default class Fabs extends Component<Props> {
             openProjectWindow([setProjectPath, setConfigInfo, getRepoInfo])
           }
         >
-          <FontAwesomeIcon size="lg" icon={['fa', 'play']} />
+          <FontAwesomeIcon size="lg" icon={['fal', 'folder-open']} />
         </Button>
       </div>
     );

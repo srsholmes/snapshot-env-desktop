@@ -30,12 +30,12 @@ import WebFontLoader from 'webfontloader';
 
 WebFontLoader.load({
   google: {
-    families: ['Roboto:300,400,500,700', 'Material Icons']
-  }
+    families: ['Roboto:300,400,500,700', 'Material Icons'],
+  },
 });
 
 fontawesome.library.add(
-  faPlay ,
+  faPlay,
   faOpenFolder,
   faCodeBranch,
   faCopy,
