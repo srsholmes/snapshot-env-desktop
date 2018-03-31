@@ -13,7 +13,7 @@ document.ondragover = document.ondrop = ev => {
   ev.preventDefault();
 };
 
-const store = configureStore(initialState);
+const store = configureStore();
 
 document.body.ondrop = ev => {
   const { path } = ev.dataTransfer.files[0];

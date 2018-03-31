@@ -26,55 +26,38 @@ const styles = theme => ({
 });
 
 class EnhancedTable extends React.Component {
-  constructor(props, context) {
-    super(props, context);
-
-    this.state = {
-      order: 'asc',
-      orderBy: 'commitDate',
-      selected: [],
-      page: 0,
-      rowsPerPage: 5,
-    };
-  }
-
-  handleRequestSort = (event, property) => {
-    const orderBy = property;
-    let order = 'desc';
+  handleRequestSort = (event, val) => {
     const { actions } = this.props;
-
-    if (this.state.orderBy === property && this.state.order === 'desc') {
-      order = 'asc';
-    }
-
-    this.setState({ order, orderBy });
-    actions.sortTableRow(orderBy, order);
+    actions.sortTableRow(val);
   };
 
   handleClick = (event, id) => {
     const { actions } = this.props;
     const { setActiveRow } = actions;
-    const { selected } = this.state;
-    const isSelected = selected.find(x => x === id);
-    this.setState({ selected: isSelected ? [] : [id] });
     setActiveRow(id);
   };
 
   handleChangePage = (event, page) => {
-    this.setState({ page });
+    this.props.actions.changePage(page);
   };
 
   handleChangeRowsPerPage = event => {
-    this.setState({ rowsPerPage: event.target.value });
+    this.props.actions.changeRowsPerPage(event.target.value);
   };
 
-  isSelected = id => this.state.selected.indexOf(id) !== -1;
+  isSelected = id => this.props.commitsTable.selected.indexOf(id) !== -1;
 
   render() {
-    const { commits } = this.props.commitsTable;
+    const {
+      order,
+      orderBy,
+      commits,
+      rowsPerPage,
+      page,
+      selected,
+    } = this.props.commitsTable;
     const { classes } = this.props;
     if (!commits.length) return null;
-    const { order, orderBy, selected, rowsPerPage, page } = this.state;
     const emptyRows =
       rowsPerPage - Math.min(rowsPerPage, commits.length - page * rowsPerPage);
     return (
