@@ -49,9 +49,38 @@ const changePage = page => {
   };
 };
 
+const getSearchFilter = (val, arr) => {
+  const copy = [...arr];
+  const res = copy.reduce((acc, curr) => {
+    const keysToSearch = Object.keys(curr);
+    const findResult = keysToSearch.some(x =>
+      curr[x].toLowerCase().includes(val)
+    );
+
+    return findResult ? [...acc, curr] : acc;
+  }, []);
+
+  return res;
+};
+
+const setCommitSearchValue = val => async (dispatch: action, getState: any) => {
+  const state = getState();
+  const { commits } = state.git; // Get them from git here, as the returned UI will be a filtered array, so we wont be able to search it again properly if cleared
+
+  return dispatch({
+    type: 'COMMITS_TABLE_SET_SEARCH_VALUE',
+    payload: {
+      searchValue: val,
+      commits: getSearchFilter(val, commits),
+    },
+  });
+};
+
 const initialState = {
+  filter: null,
   selectedRow: null,
   selectedCommit: null,
+  searchValue: '',
   commits: [], // UI state for repo in the table
   order: 'asc',
   orderBy: 'commitDate',
@@ -72,10 +101,12 @@ export default function commitsTable(state = initialState, action) {
         commits: sorted,
       };
     }
-    case 'COMMITS_TABLE_SET_ACTIVE_ROW':
-    case 'SETTING_REPO_INFO':
+    case 'CLOSE_SEARCH':
     case 'COMMITS_TABLE_CHANGE_PAGE':
     case 'COMMITS_TABLE_CHANGE_ROWS_PAGE':
+    case 'COMMITS_TABLE_SET_ACTIVE_ROW':
+    case 'COMMITS_TABLE_SET_SEARCH_VALUE':
+    case 'SETTING_REPO_INFO':
       return {
         ...state,
         ...action.payload,
@@ -86,10 +117,11 @@ export default function commitsTable(state = initialState, action) {
 }
 
 const tableActions = {
-  sortTableRow,
-  setActiveRow,
   changePage,
   changeRowsPerPage,
+  setActiveRow,
+  setCommitSearchValue,
+  sortTableRow,
 };
 
 export { tableActions };

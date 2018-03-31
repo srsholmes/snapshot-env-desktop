@@ -12,29 +12,13 @@ import Checkbox from 'material-ui/Checkbox';
 import Toolbar from './Toolbar';
 import Head from './Head';
 
-const styles = theme => ({
-  root: {
-    width: '100%',
-    marginTop: '5%'
-  },
-  table: {
-    minWidth: 800,
-  },
-  tableWrapper: {
-    overflowX: 'auto',
-  },
-});
-
 class EnhancedTable extends React.Component {
   handleRequestSort = (event, val) => {
-    const { actions } = this.props;
-    actions.sortTableRow(val);
+    this.props.actions.sortTableRow(val);
   };
 
   handleClick = (event, id) => {
-    const { actions } = this.props;
-    const { setActiveRow } = actions;
-    setActiveRow(id);
+    this.props.actions.setActiveRow(id);
   };
 
   handleChangePage = (event, page) => {
@@ -48,6 +32,7 @@ class EnhancedTable extends React.Component {
   isSelected = id => this.props.commitsTable.selected.indexOf(id) !== -1;
 
   render() {
+    const { project: { path } } = this.props;
     const {
       order,
       orderBy,
@@ -57,12 +42,12 @@ class EnhancedTable extends React.Component {
       selected,
     } = this.props.commitsTable;
     const { classes } = this.props;
-    if (!commits.length) return null;
+    if (!path) return null;
     const emptyRows =
       rowsPerPage - Math.min(rowsPerPage, commits.length - page * rowsPerPage);
     return (
       <Paper className={classes.root}>
-        <Toolbar numSelected={selected.length} />
+        <Toolbar {...this.props} numSelected={selected.length} />
         <div className={classes.tableWrapper}>
           <Table className={classes.table}>
             <Head
@@ -128,5 +113,24 @@ class EnhancedTable extends React.Component {
     );
   }
 }
+
+const styles = theme => ({
+  root: {
+    width: '100%',
+    marginTop: '5%',
+  },
+  table: {
+    minWidth: 800,
+  },
+  textField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    width: 200,
+    paddingBottom: 20,
+  },
+  tableWrapper: {
+    overflowX: 'auto',
+  },
+});
 
 export default withStyles(styles)(EnhancedTable);

@@ -42,7 +42,7 @@ const toggleDrawer = () => async (dispatch: action, getState) => {
 
 const initialState = {
   drawer: {
-    open: false,
+    open: true,
   },
   modal: {
     display: false,

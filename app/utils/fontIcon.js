@@ -1,7 +1,7 @@
 import fontawesome from '@fortawesome/fontawesome';
 import faCodeBranch from '@fortawesome/fontawesome-pro-light/faCodeBranch';
 import faOpenFolder from '@fortawesome/fontawesome-pro-light/faFolderOpen';
-import faCog from  '@fortawesome/fontawesome-pro-light/faCog';
+import faCog from '@fortawesome/fontawesome-pro-light/faCog';
 import faWhatsapp from '@fortawesome/fontawesome-free-brands/faWhatsapp';
 import faFacebook from '@fortawesome/fontawesome-free-brands/faFacebook';
 import faBars from '@fortawesome/fontawesome-free-solid/faBars';
@@ -15,16 +15,12 @@ import faMars from '@fortawesome/fontawesome-pro-light/faMars';
 import faSearch from '@fortawesome/fontawesome-pro-light/faSearch';
 import faCopy from '@fortawesome/fontawesome-pro-light/faCopy';
 import faFrown from '@fortawesome/fontawesome-pro-light/faFrown';
-import faPlay from '@fortawesome/fontawesome-pro-light/faPlay';
+import faPlay from '@fortawesome/fontawesome-pro-solid/faPlay';
 import faShare from '@fortawesome/fontawesome-pro-light/faShare';
 import faShareAlt from '@fortawesome/fontawesome-pro-light/faShareAlt';
 import faSignInAlt from '@fortawesome/fontawesome-pro-light/faSignInAlt';
-import faSync from '@fortawesome/fontawesome-pro-light/faSync';
 import faThumbsDown from '@fortawesome/fontawesome-pro-light/faThumbsDown';
 import faThumbsUp from '@fortawesome/fontawesome-pro-light/faThumbsUp';
-import faUsers from '@fortawesome/fontawesome-pro-light/faUsers';
-import faVenus from '@fortawesome/fontawesome-pro-light/faVenus';
-import faVenusMars from '@fortawesome/fontawesome-pro-light/faVenusMars';
 import faSpinner from '@fortawesome/fontawesome-pro-light/faSpinner';
 import WebFontLoader from 'webfontloader';
 
@@ -56,10 +52,6 @@ fontawesome.library.add(
   faShare,
   faShareAlt,
   faSignInAlt,
-  faSync,
   faThumbsDown,
-  faUsers,
   faThumbsUp,
-  faVenus,
-  faVenusMars
 );
