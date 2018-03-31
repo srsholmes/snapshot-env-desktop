@@ -7,15 +7,17 @@ import Dialog, {
   DialogTitle,
 } from 'material-ui/Dialog';
 import { LinearProgress } from 'material-ui/Progress';
+import styled from 'styled-components';
 
 class Modal extends React.Component {
   handleClose = () => {
-    const { closeModal } = this.props.actions;
+    const { closeModal, setSnapshotMessage } = this.props.actions;
     closeModal();
+    setSnapshotMessage('', 0);
   };
 
   render() {
-    const { global } = this.props;
+    const { global, className } = this.props;
     const { modal, snapshot } = global;
     return (
       <div>
@@ -34,6 +36,7 @@ class Modal extends React.Component {
             </DialogContentText>
           </DialogContent>
           <LinearProgress
+            className={className}
             variant="determinate"
             value={snapshot.progress / snapshot.taskLength * 100}
           />
@@ -47,4 +50,8 @@ class Modal extends React.Component {
     );
   }
 }
-export default Modal;
+const Styled = styled(Modal)`
+  width: 90%;
+  margin: auto;
+`;
+export default Styled;

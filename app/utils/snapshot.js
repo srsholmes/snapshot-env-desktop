@@ -85,13 +85,12 @@ const copyBuildDir = async (dispatch, output, path, commitId) => {
 const revertGitCheckout = async (dispatch, branch, repo) => {
   await repo.checkout(branch);
   dispatch(
-    setSnapshotMessage(`Reverting back to previous branch: ${branch}`),
-    10
+    setSnapshotMessage(`Reverting back to previous branch: ${branch}`, 10)
   );
 };
 
 const showSuccessMessage = async dispatch => {
-  dispatch(setSnapshotMessage(`Successfully built snapshot 👍`), 11);
+  dispatch(setSnapshotMessage(`Successfully built snapshot 👍`, 11));
 };
 
 const snapshot = async ({ state, dispatch }) => {
