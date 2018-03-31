@@ -9,12 +9,13 @@ import { bindActionCreators } from 'redux';
 import simpleGit from 'simple-git';
 import CommitsTable from '../components/CommitsTable/CommitsTable';
 import Toolbar from '../components/Toolbar';
-import Footer from '../components/Footer';
+import Modal from '../components/Modal'
 import Fabs from '../components/Fabs';
 import { gitActions } from '../reducers/git';
 import { tableActions } from '../reducers/commitsTable';
 import { projectActions } from '../reducers/project';
 import { openProjectWindow } from '../utils/fileUtils';
+import { globalActions } from '../reducers/global';
 
 
 class Homepage extends Component {
@@ -42,7 +43,7 @@ class Homepage extends Component {
         {!path && <p>Drag a folder onto the window to get started</p>}
         <CommitsTable {...this.props} />
         <Fabs {...this.props} />
-        {/*<Footer {...this.props} />*/}
+        <Modal {...this.props}/>
       </React.Fragment>
     );
   }
@@ -54,7 +55,7 @@ const mapDispatchToProps: MapDispatchToProps<
   DispatchProps
 > = dispatch => ({
   actions: bindActionCreators(
-    { ...tableActions, ...gitActions, ...projectActions },
+    { ...tableActions, ...gitActions, ...projectActions, ...globalActions},
     dispatch
   ),
 });
