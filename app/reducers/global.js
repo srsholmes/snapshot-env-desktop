@@ -1,5 +1,7 @@
 // @flow
 
+const SNAPSHOT_TASKS_LENGTH = 11;
+
 const openModal = () => async (dispatch: action => void) => {
   return dispatch({
     type: 'OPEN_GLOABL_MODAL',
@@ -39,7 +41,7 @@ const initialState = {
     },
   },
   snapshot: {
-    taskLength: 6,
+    taskLength: SNAPSHOT_TASKS_LENGTH,
     progress: 0,
     currentTask: 'Doing something',
   },
