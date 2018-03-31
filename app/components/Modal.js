@@ -9,11 +9,6 @@ import Dialog, {
 import { LinearProgress } from 'material-ui/Progress';
 
 class Modal extends React.Component {
-  handleClickOpen = () => {
-    const { openModal } = this.props.actions;
-    openModal();
-  };
-
   handleClose = () => {
     const { closeModal } = this.props.actions;
     closeModal();
@@ -24,7 +19,6 @@ class Modal extends React.Component {
     const { modal, snapshot } = global;
     return (
       <div>
-        <Button onClick={this.handleClickOpen}>Open alert dialog</Button>
         <Dialog
           open={modal.display}
           onClose={this.handleClose}
@@ -39,7 +33,10 @@ class Modal extends React.Component {
               {snapshot.currentTask}
             </DialogContentText>
           </DialogContent>
-          <LinearProgress variant="determinate" value={snapshot.progress} />
+          <LinearProgress
+            variant="determinate"
+            value={snapshot.progress / snapshot.taskLength * 100}
+          />
           <DialogActions>
             <Button onClick={this.handleClose} color="primary" autoFocus>
               Close
