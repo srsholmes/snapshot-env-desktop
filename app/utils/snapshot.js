@@ -1,7 +1,7 @@
 // @flow
 import { TEMP_DIR } from '../utils/globals';
 import promisify from '../utils/promisify';
-
+import { globalActions } from '../reducers/global';
 const simpleGit = require('simple-git/promise');
 const { shell } = require('electron');
 const exec = promisify(require('child_process').exec);
@@ -10,6 +10,8 @@ const { server } = require('../../server');
 
 const { log } = console;
 const separator = () => log('*'.repeat(80));
+const { openModal, setSnapshotMessage } = globalActions;
+let globalDispatch;
 
 // const warnIfUncommittedChanges = async commit => {
 //   if (commit) {
@@ -37,6 +39,7 @@ const ignoreSnapshot = async path => {
     await repo.commit('added snapshot to .gitignore', '.gitignore');
   }
   log('Snapshot directory added to gitignore');
+  globalDispatch(setSnapshotMessage('Snapshot directory added to gitignore'));
 };
 
 // const useLocalServer = async server => {
@@ -97,7 +100,8 @@ const snapshot = async ({ state, dispatch }) => {
   const { selectedCommit } = commitsTable;
   const { build, output } = config;
   console.log({ config });
-
+  dispatch(openModal());
+  globalDispatch = dispatch;
   try {
     await ignoreSnapshot(path);
     // await warnIfUncommittedChanges(commit);

@@ -6,6 +6,7 @@ import Dialog, {
   DialogContentText,
   DialogTitle,
 } from 'material-ui/Dialog';
+import { LinearProgress } from 'material-ui/Progress';
 
 class Modal extends React.Component {
   handleClickOpen = () => {
@@ -20,7 +21,7 @@ class Modal extends React.Component {
 
   render() {
     const { global } = this.props;
-    const { modal } = global;
+    const { modal, snapshot } = global;
     return (
       <div>
         <Button onClick={this.handleClickOpen}>Open alert dialog</Button>
@@ -31,16 +32,17 @@ class Modal extends React.Component {
           aria-describedby="alert-dialog-description"
         >
           <DialogTitle id="alert-dialog-title">
-            {"Do you want to display a modal?"}
+            {'Building your snapshot 😊'}
           </DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-              Some Modal content in here
+              {snapshot.currentTask}
             </DialogContentText>
           </DialogContent>
+          <LinearProgress variant="determinate" value={snapshot.progress} />
           <DialogActions>
             <Button onClick={this.handleClose} color="primary" autoFocus>
-              Agree
+              Close
             </Button>
           </DialogActions>
         </Dialog>
@@ -48,5 +50,4 @@ class Modal extends React.Component {
     );
   }
 }
-
 export default Modal;

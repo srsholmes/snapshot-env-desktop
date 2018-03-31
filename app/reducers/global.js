@@ -18,6 +18,15 @@ const closeModal = () => async (dispatch: action => void) => {
   });
 };
 
+const setSnapshotMessage = msg => async (dispatch: action => void) => {
+  return dispatch({
+    type: 'SET_GLOBAL_SNAPSHOT_MESSAGE',
+    payload: {
+      message: msg,
+    },
+  });
+};
+
 const initialState = {
   modal: {
     display: false,
@@ -25,6 +34,10 @@ const initialState = {
       type: 'info',
       content: '',
     },
+  },
+  snapshot: {
+    progress: 0,
+    currentTask: 'Doing something',
   },
 };
 
@@ -50,6 +63,16 @@ export default function global(state = initialState, action) {
           display: false,
         },
       };
+    case 'SET_GLOBAL_SNAPSHOT_MESSAGE': {
+      return {
+        ...state,
+        snapshot: {
+          ...state.snapshot,
+          progress: 0,
+          currentTask: action.payload.message,
+        },
+      };
+    }
     default:
       return state;
   }
@@ -57,7 +80,8 @@ export default function global(state = initialState, action) {
 
 const globalActions = {
   openModal,
-  closeModal
+  closeModal,
+  setSnapshotMessage,
 };
 
 export { globalActions };
