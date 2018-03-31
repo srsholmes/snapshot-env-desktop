@@ -53,9 +53,9 @@ const getSearchFilter = (val, arr) => {
   const copy = [...arr];
   const res = copy.reduce((acc, curr) => {
     const keysToSearch = Object.keys(curr);
-    const findResult = keysToSearch.some(x =>
-      curr[x].toLowerCase().includes(val)
-    );
+    const findResult = keysToSearch.some(x => {
+      return curr[x].toLowerCase().includes(val);
+    });
 
     return findResult ? [...acc, curr] : acc;
   }, []);

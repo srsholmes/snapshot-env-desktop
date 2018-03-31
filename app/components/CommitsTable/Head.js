@@ -6,7 +6,6 @@ import {
   TableRow,
   TableSortLabel,
 } from 'material-ui/Table';
-import Checkbox from 'material-ui/Checkbox';
 import Tooltip from 'material-ui/Tooltip';
 
 type Props = {
