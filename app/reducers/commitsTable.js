@@ -49,12 +49,19 @@ const changePage = page => {
   };
 };
 
+const KEYS_TO_SEARCH = [
+  'commitId',
+  'commitMessage',
+  'commitDate',
+  'author',
+  'authorEmail',
+];
 const getSearchFilter = (val, arr) => {
   const copy = [...arr];
+  const lowercaseVal = val.toLowerCase();
   const res = copy.reduce((acc, curr) => {
-    const keysToSearch = Object.keys(curr);
-    const findResult = keysToSearch.some(x => {
-      return curr[x].toLowerCase().includes(val);
+    const findResult = KEYS_TO_SEARCH.some(x => {
+      return curr[x].toLowerCase().includes(lowercaseVal);
     });
 
     return findResult ? [...acc, curr] : acc;
@@ -65,7 +72,7 @@ const getSearchFilter = (val, arr) => {
 
 const setCommitSearchValue = val => async (dispatch: action, getState: any) => {
   const state = getState();
-  const { commits } = state.git; // Get them from git here, as the returned UI will be a filtered array, so we wont be able to search it again properly if cleared
+  const { commits } = state.git; // Get the commits from git state here, as the returned UI will be a filtered array, so we wont be able to search it again properly if cleared
 
   return dispatch({
     type: 'COMMITS_TABLE_SET_SEARCH_VALUE',
