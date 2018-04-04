@@ -108,7 +108,12 @@ const snapshot = async ({ state, dispatch }) => {
     // await warnIfUncommittedChanges(dispatch, commit);
     await checkoutGitCommit(dispatch, path, selectedCommit, repo);
     await runBuildStep(dispatch, build, path);
-    const directoryToHost = await copyBuildDir(dispatch, output, path);
+    const directoryToHost = await copyBuildDir(
+      dispatch,
+      output,
+      path,
+      selectedCommit
+    );
     await createLocalServer(dispatch, directoryToHost);
     await revertGitCheckout(dispatch, currentBranch, repo);
     showSuccessMessage(dispatch);

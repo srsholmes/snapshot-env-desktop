@@ -5,6 +5,7 @@ import { CircularProgress } from 'material-ui/Progress';
 import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import simpleGit from 'simple-git/promise';
+import styled from 'styled-components';
 import { openProjectWindow } from '../../utils/fileUtils';
 
 const DRAWER_WIDTH = 270;
@@ -23,9 +24,10 @@ class ClippedDrawer extends React.Component {
   };
 
   render() {
-    const { classes, global, actions, project } = this.props;
+    const { className, classes, global, actions, project } = this.props;
     const { setProjectPath, setConfigInfo, getRepoInfo } = actions;
     const { drawer } = global;
+    console.log({ classes })
     return (
       <div className={classes.root}>
         <div
@@ -66,10 +68,7 @@ class ClippedDrawer extends React.Component {
                   <ListItem button onClick={this.fetchRepo}>
                     <ListItemIcon>
                       {this.state.loading ? (
-                        <CircularProgress
-                          size={25}
-                          className={classes.progress}
-                        />
+                        <CircularProgress size={25} />
                       ) : (
                         <FontAwesomeIcon
                           size="lg"
@@ -124,4 +123,39 @@ const styles = theme => ({
   toolbar: theme.mixins.toolbar,
 });
 
+// const Styled = styled(ClippedDrawer)(theme => ({
+//   backgroundColor: theme.palette.background.paper,
+// }));
+
+const Styled = styled(ClippedDrawer)`
+  flex-grow: 1;
+  z-index: 1;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  
+  .paper {
+    position:relative;
+    width: 100%;
+  }
+
+  .drawerWrapper {
+    width: 270px;
+    transition: margin-left 0.3s ease-in-out;
+  }
+
+  .drawerPaper {
+    position: relative;
+    width: 100%;
+  }
+  .content {
+    flex-grow: 1;
+    min-width: 0;// So the Typography noWrap works
+    //background-color: theme.palette.background.default,
+    //padding: theme.spacing.unit * 3,
+  },
+`;
+
+// export default Styled;
+// export default withStyles(styles)(Styled);
 export default withStyles(styles)(ClippedDrawer);
