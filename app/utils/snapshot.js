@@ -6,6 +6,10 @@ import { TEMP_DIR } from '../utils/globals';
 import promisify from '../utils/promisify';
 import { globalActions } from '../reducers/global';
 
+const { remote } = require('electron');
+
+const { app } = remote;
+
 const exec = promisify(require('child_process').exec);
 const { server } = require('../../server');
 
@@ -81,9 +85,10 @@ const copyBuildDir = async (dispatch, output, path, commitId) => {
   separator();
   dispatch(setSnapshotMessage('Copying output directory', 5));
   const dir = `${path}/${TEMP_DIR}/${commitId}`;
-  await copy(`${path}/${output}`, dir);
+  const electronPath = `${`${app.getPath('userData')}/${commitId}`}`;
+  await copy(`${path}/${output}`, electronPath);
   dispatch(setSnapshotMessage('Directory copied!', 6));
-  return dir;
+  return electronPath;
 };
 
 const revertGitCheckout = async (dispatch, branch, repo, err) => {
@@ -117,7 +122,6 @@ const snapshot = async ({ state, dispatch }) => {
   const { appServer } = global.server;
 
   dispatch(openModal('Building your snapshot 😊'));
-  
   if (appServer) {
     appServer.close(() => {
       dispatch(setSnapshotMessage(`Removing previous hosted snapshot`));
@@ -125,7 +129,7 @@ const snapshot = async ({ state, dispatch }) => {
     dispatch(setAppServer(null));
   }
   try {
-    await ignoreSnapshot(dispatch, path);
+    // await ignoreSnapshot(dispatch, path);
     // await warnIfUncommittedChanges(dispatch, commit);
     await checkoutGitCommit(dispatch, path, selectedCommit, repo);
     await runBuildStep(dispatch, build, path);
