@@ -2,11 +2,11 @@
 
 const SNAPSHOT_TASKS_LENGTH = 11;
 
-const openModal = () => async (dispatch: action => void) => {
+const openModal = content => async (dispatch: action => void) => {
   return dispatch({
     type: 'OPEN_GLOBAL_MODAL',
     payload: {
-      content: 'Hello Simon',
+      content,
     },
   });
 };
@@ -15,7 +15,7 @@ const closeModal = () => async (dispatch: action => void) => {
   return dispatch({
     type: 'CLOSE_GLOBAL_MODAL',
     payload: {
-      content: 'Hello Simon',
+      content: '',
     },
   });
 };
@@ -63,7 +63,7 @@ const initialState = {
   snapshot: {
     taskLength: SNAPSHOT_TASKS_LENGTH,
     progress: 0,
-    currentTask: 'Doing something',
+    currentTask: 'Loading....',
   },
   server: {
     appServer: null,

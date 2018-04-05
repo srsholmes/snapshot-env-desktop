@@ -60,11 +60,12 @@ const createLocalServer = async (dispatch, dir) => {
   );
   const { port, app } = await server(dir);
   shell.openExternal(`http://localhost:${port}`);
-  console.log({ port, app })
+  console.log({ port, app });
   dispatch(setAppServer(app));
   dispatch(
     setSnapshotMessage(`View local deploy here: http://localhost:${port}`, 8)
   );
+  return { port, app };
 };
 
 const runBuildStep = async (dispatch, cmd, path) => {
@@ -95,8 +96,13 @@ const revertGitCheckout = async (dispatch, branch, repo, err) => {
   );
 };
 
-const showSuccessMessage = async dispatch => {
-  dispatch(setSnapshotMessage(`Successfully built snapshot 👍`, 11));
+const showSuccessMessage = async (dispatch, port) => {
+  dispatch(
+    setSnapshotMessage(
+      `Successfully built snapshot 👍. View on port http://localhost:${port}`,
+      11
+    )
+  );
 };
 
 const snapshot = async ({ state, dispatch }) => {
@@ -109,12 +115,15 @@ const snapshot = async ({ state, dispatch }) => {
   const { build, output } = config;
   const { appServer } = global.server;
 
+  dispatch(openModal('Building your snapshot 😊'));
   if (appServer) {
-    appServer.close();
+    appServer.close(() => {
+      console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+      console.log('Closed out remaining connections');
+      process.exit(0);
+    });
     dispatch(setAppServer(null));
   }
-  dispatch(openModal());
-
   try {
     await ignoreSnapshot(dispatch, path);
     // await warnIfUncommittedChanges(dispatch, commit);
@@ -126,9 +135,9 @@ const snapshot = async ({ state, dispatch }) => {
       path,
       selectedCommit
     );
-    await createLocalServer(dispatch, directoryToHost);
+    const { port, app } = await createLocalServer(dispatch, directoryToHost);
     await revertGitCheckout(dispatch, currentBranch, repo);
-    showSuccessMessage(dispatch);
+    showSuccessMessage(dispatch, port);
   } catch (err) {
     dispatch(setSnapshotMessage(`ERROR`, err));
     await revertGitCheckout(dispatch, currentBranch, repo, err);

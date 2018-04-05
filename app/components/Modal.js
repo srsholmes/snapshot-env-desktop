@@ -27,9 +27,7 @@ class Modal extends React.Component {
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
-          <DialogTitle id="alert-dialog-title">
-            {'Building your snapshot 😊'}
-          </DialogTitle>
+          <DialogTitle id="alert-dialog-title">{modal.message.content}</DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
               {snapshot.currentTask}

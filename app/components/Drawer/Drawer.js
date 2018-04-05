@@ -20,6 +20,7 @@ class ClippedDrawer extends React.Component {
     const repo = await simpleGit(project.path);
     const remote = await repo.listRemote();
     await repo.fetch(remote);
+    // TODO: Set that in to the git state
     this.setState({ loading: false });
   };
 
@@ -27,7 +28,7 @@ class ClippedDrawer extends React.Component {
     const { className, classes, global, actions, project } = this.props;
     const { setProjectPath, setConfigInfo, getRepoInfo } = actions;
     const { drawer } = global;
-    console.log({ classes })
+    // console.log({ classes })
     return (
       <div className={classes.root}>
         <div
@@ -58,33 +59,33 @@ class ClippedDrawer extends React.Component {
                   </ListItemIcon>
                   <ListItemText primary="Open Project" />
                 </ListItem>
-                <ListItem button>
-                  <ListItemIcon>
-                    <FontAwesomeIcon size="lg" icon={['fal', 'code-branch']} />
-                  </ListItemIcon>
-                  <ListItemText primary="Clone Project" />
-                </ListItem>
-                {project.path && (
-                  <ListItem button onClick={this.fetchRepo}>
-                    <ListItemIcon>
-                      {this.state.loading ? (
-                        <CircularProgress size={25} />
-                      ) : (
-                        <FontAwesomeIcon
-                          size="lg"
-                          icon={['fal', 'code-branch']}
-                        />
-                      )}
-                    </ListItemIcon>
-                    <ListItemText primary="Fetch Current Project" />
-                  </ListItem>
-                )}
-                <ListItem button>
-                  <ListItemIcon>
-                    <FontAwesomeIcon size="lg" icon={['fal', 'cog']} />
-                  </ListItemIcon>
-                  <ListItemText primary="Settings" />
-                </ListItem>
+                {/*<ListItem button>*/}
+                  {/*<ListItemIcon>*/}
+                    {/*<FontAwesomeIcon size="lg" icon={['fal', 'code-branch']} />*/}
+                  {/*</ListItemIcon>*/}
+                  {/*<ListItemText primary="Clone Project" />*/}
+                {/*</ListItem>*/}
+                {/*{project.path && (*/}
+                  {/*<ListItem button onClick={this.fetchRepo}>*/}
+                    {/*<ListItemIcon>*/}
+                      {/*{this.state.loading ? (*/}
+                        {/*<CircularProgress size={25} />*/}
+                      {/*) : (*/}
+                        {/*<FontAwesomeIcon*/}
+                          {/*size="lg"*/}
+                          {/*icon={['fal', 'code-branch']}*/}
+                        {/*/>*/}
+                      {/*)}*/}
+                    {/*</ListItemIcon>*/}
+                    {/*<ListItemText primary="Fetch Current Project" />*/}
+                  {/*</ListItem>*/}
+                {/*)}*/}
+                {/*<ListItem button>*/}
+                  {/*<ListItemIcon>*/}
+                    {/*<FontAwesomeIcon size="lg" icon={['fal', 'cog']} />*/}
+                  {/*</ListItemIcon>*/}
+                  {/*<ListItemText primary="Settings" />*/}
+                {/*</ListItem>*/}
               </div>
             </List>
           </Drawer>
