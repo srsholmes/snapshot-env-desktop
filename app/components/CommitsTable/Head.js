@@ -18,10 +18,16 @@ type Props = {
 };
 
 const columnData = [
+   {
+    id: 'branch',
+    numeric: false,
+    disablePadding: true,
+    label: 'Branch Name',
+  },
   {
     id: 'commitMessage',
     numeric: false,
-    disablePadding: true,
+    disablePadding: false,
     label: 'Commit Message',
   },
   { id: 'commitId', numeric: true, disablePadding: false, label: 'Commit ID' },

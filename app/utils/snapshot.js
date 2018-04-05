@@ -99,7 +99,8 @@ const revertGitCheckout = async (dispatch, branch, repo, err) => {
 const showSuccessMessage = async (dispatch, port) => {
   dispatch(
     setSnapshotMessage(
-      `Successfully built snapshot 👍. View on port http://localhost:${port}`,
+      `Successfully built snapshot 👍. \n
+      View on http://localhost:${port}`,
       11
     )
   );
@@ -116,11 +117,10 @@ const snapshot = async ({ state, dispatch }) => {
   const { appServer } = global.server;
 
   dispatch(openModal('Building your snapshot 😊'));
+  
   if (appServer) {
     appServer.close(() => {
-      console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
-      console.log('Closed out remaining connections');
-      process.exit(0);
+      dispatch(setSnapshotMessage(`Removing previous hosted snapshot`));
     });
     dispatch(setAppServer(null));
   }

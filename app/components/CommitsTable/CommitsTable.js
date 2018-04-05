@@ -75,8 +75,8 @@ class EnhancedTable extends React.Component {
                       <TableCell padding="checkbox">
                         <Checkbox checked={isSelected} />
                       </TableCell>
-
-                      <TableCell padding="none">{n.commitMessage}</TableCell>
+                      <TableCell padding="none">{n.branch}</TableCell>
+                      <TableCell>{n.commitMessage}</TableCell>
                       <TableCell numeric>{n.commitId}</TableCell>
                       <TableCell numeric>{n.commitDate}</TableCell>
                       <TableCell numeric>{n.author}</TableCell>

@@ -20,12 +20,14 @@ export function getRepoInfo(path) {
 
     const commits = await Promise.all(
       Object.entries(local.branches).map(async ([_, val]) => {
+        console.log({ val })
         const info = await repo.log([val.commit]);
         const { latest } = info;
         return {
           id: latest.hash,
           commitId: latest.hash,
-          commitMessage: latest.message,
+          branch: val.name,
+          commitMessage: val.label,
           commitDate: latest.date,
           author: latest.author_name,
           authorEmail: latest.author_email,
