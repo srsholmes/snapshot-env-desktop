@@ -76,6 +76,8 @@ app.on('ready', async () => {
     // mainWindow.focus();
   });
 
+  // mainWindow.webContents.openDevTools();
+
   // mainWindow.on('browser-window-blur', () => {
   //   console.log('MAIN WINDOW BLUR');
   //   // Register a 'CommandOrControl+Y' shortcut listener.

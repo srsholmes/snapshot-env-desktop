@@ -1,6 +1,7 @@
 // @flow
 import snapshot from '../utils/snapshot';
 import { globalActions } from './global';
+
 const simpleGit = require('simple-git/promise');
 
 // Command to get all the branches on the ref and sort them by date.
@@ -11,38 +12,55 @@ const simpleGit = require('simple-git/promise');
 
 export function getRepoInfo(path) {
   return async (dispatch: action => void) => {
-    const repo = await simpleGit(path);
     dispatch(globalActions.openModal('Please wait ⏳'));
+    const repo = await simpleGit(path);
     await repo.pull();
     await repo.fetch(['-ap']);
     const branch = await repo.branch();
-    const local = await repo.branchLocal();
 
-    const commits = await Promise.all(
-      Object.entries(local.branches).map(async ([_, val]) => {
-        console.log({ val })
-        const info = await repo.log([val.commit]);
-        const { latest } = info;
+    const branchesWithoutRemote = Object.entries(branch.branches).reduce(
+      (acc, curr) => {
+        const [key, val] = curr;
+        if (key.includes('remotes/origin/')) return acc;
         return {
-          id: latest.hash,
-          commitId: latest.hash,
-          branch: val.name,
-          commitMessage: val.label,
-          commitDate: latest.date,
-          author: latest.author_name,
-          authorEmail: latest.author_email,
+          ...acc,
+          [key]: val,
         };
-      })
-    );
-    dispatch(globalActions.closeModal());
-    return dispatch({
-      type: 'SETTING_REPO_INFO',
-      payload: {
-        currentBranch: branch.current,
-        commits,
-        repo,
       },
-    });
+      {}
+    );
+
+    // console.log({ branchesWithoutRemote });
+    try {
+      if (branchesWithoutRemote) {
+        const commits = await Promise.all(
+          Object.entries(branchesWithoutRemote).map(async ([_, val]) => {
+            const info = await repo.log([val.commit]);
+            const { latest } = info;
+            return {
+              id: latest.hash,
+              commitId: latest.hash,
+              branch: val.name,
+              commitMessage: val.label,
+              commitDate: latest.date,
+              author: latest.author_name,
+              authorEmail: latest.author_email,
+            };
+          })
+        );
+        dispatch(globalActions.closeModal());
+        return dispatch({
+          type: 'SETTING_REPO_INFO',
+          payload: {
+            currentBranch: branch.current,
+            commits,
+            repo,
+          },
+        });
+      }
+    } catch (err) {
+      console.log('ERROR', err);
+    }
   };
 }
 
