@@ -69,6 +69,7 @@ const runBuildStep = async (dispatch, cmd, path) => {
   separator();
   dispatch(setSnapshotMessage('Running build process...', 4));
   const { stdout, stderr } = await exec(`${cmd} --prefix ${path}`, {
+    shell: true,
     maxBuffer: 1024 * 8000,
   });
 };
@@ -82,10 +83,13 @@ const copyBuildDir = async (dispatch, output, path, commitId) => {
   return dir;
 };
 
-const revertGitCheckout = async (dispatch, branch, repo) => {
+const revertGitCheckout = async (dispatch, branch, repo, err) => {
   await repo.checkout(branch);
   dispatch(
-    setSnapshotMessage(`Reverting back to previous branch: ${branch}`, 10)
+    setSnapshotMessage(
+      `Reverting back to previous branch: ${branch}. ${err && err}`,
+      10
+    )
   );
 };
 
@@ -119,7 +123,7 @@ const snapshot = async ({ state, dispatch }) => {
     showSuccessMessage(dispatch);
   } catch (err) {
     dispatch(setSnapshotMessage(`ERROR`, err));
-    await revertGitCheckout(dispatch, currentBranch, repo);
+    await revertGitCheckout(dispatch, currentBranch, repo, err);
   }
 };
 export default snapshot;

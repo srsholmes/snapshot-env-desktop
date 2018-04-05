@@ -9,6 +9,10 @@ import { setProjectPath, setConfigInfo } from './reducers/project';
 import { getRepoInfo } from './reducers/git';
 import initialState from './store/example-state';
 
+// Fix path for bundle
+const fixPath = require('fix-path');
+fixPath();
+
 document.ondragover = document.ondrop = ev => {
   ev.preventDefault();
 };

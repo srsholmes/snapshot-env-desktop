@@ -198,6 +198,7 @@
     "devtron": "^1.4.0",
     "electron-debug": "^1.5.0",
     "eslint-plugin-prettier": "^2.6.0",
+    "fix-path": "^2.1.0",
     "font-awesome": "^4.7.0",
     "fs-extra": "^5.0.0",
     "history": "^4.7.2",
