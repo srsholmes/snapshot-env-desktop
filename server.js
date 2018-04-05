@@ -6,10 +6,13 @@ const server = path => {
   console.log('EXPRESS STATIC', path);
   const app = express();
   app.use(serveStatic(path));
-  app.listen(PORT);
-  return PORT;
+  const appServer = app.listen(PORT);
+  return {
+    port: PORT,
+    app: appServer,
+  };
 };
 
 module.exports = {
-  server
+  server,
 };

@@ -40,6 +40,15 @@ const toggleDrawer = () => async (dispatch: action, getState) => {
   });
 };
 
+const setAppServer = server => async (dispatch: action) => {
+  return dispatch({
+    type: 'SET_APP_SERVER',
+    payload: {
+      appServer: server,
+    },
+  });
+};
+
 const initialState = {
   drawer: {
     open: true,
@@ -56,10 +65,22 @@ const initialState = {
     progress: 0,
     currentTask: 'Doing something',
   },
+  server: {
+    appServer: null,
+  },
 };
 
 export default function global(state = initialState, action) {
   switch (action.type) {
+    case 'SET_APP_SERVER': {
+      return {
+        ...state,
+        server: {
+          ...state.server,
+          appServer: action.payload.appServer,
+        },
+      };
+    }
     case 'OPEN_DRAWER': {
       return { ...state, drawer: { open: true } };
     }
@@ -106,6 +127,7 @@ const globalActions = {
   closeModal,
   toggleDrawer,
   setSnapshotMessage,
+  setAppServer,
 };
 
 export { globalActions };

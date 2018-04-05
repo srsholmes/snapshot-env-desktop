@@ -11,7 +11,7 @@ const { server } = require('../../server');
 
 const { log } = console;
 const separator = () => log('*'.repeat(80));
-const { openModal, setSnapshotMessage } = globalActions;
+const { openModal, setSnapshotMessage, setAppServer } = globalActions;
 
 // const warnIfUncommittedChanges = async commit => {
 //   if (commit) {
@@ -58,10 +58,12 @@ const createLocalServer = async (dispatch, dir) => {
       7
     )
   );
-  const PORT = await server(dir);
-  shell.openExternal(`http://localhost:${PORT}`);
+  const { port, app } = await server(dir);
+  shell.openExternal(`http://localhost:${port}`);
+  console.log({ port, app })
+  dispatch(setAppServer(app));
   dispatch(
-    setSnapshotMessage(`View local deploy here: http://localhost:${PORT}`, 8)
+    setSnapshotMessage(`View local deploy here: http://localhost:${port}`, 8)
   );
 };
 
@@ -98,13 +100,19 @@ const showSuccessMessage = async dispatch => {
 };
 
 const snapshot = async ({ state, dispatch }) => {
-  const { git, project, commitsTable } = state;
+  const { git, project, commitsTable, global } = state;
   const { repo, currentBranch } = git;
 
   // TODO: repo.cwd(workingDirectory), sets current working dir of repo.
   const { path, config } = project;
   const { selectedCommit } = commitsTable;
   const { build, output } = config;
+  const { appServer } = global.server;
+
+  if (appServer) {
+    appServer.close();
+    dispatch(setAppServer(null));
+  }
   dispatch(openModal());
 
   try {
