@@ -13,26 +13,29 @@ const simpleGit = require('simple-git/promise');
 export function getRepoInfo(path) {
   return async (dispatch: action => void) => {
     dispatch(globalActions.openModal('Please wait ⏳'));
-    const repo = await simpleGit(path);
-    await repo.pull();
-    await repo.fetch(['-ap']);
-    const branch = await repo.branch();
-
-    const branchesWithoutRemote = Object.entries(branch.branches).reduce(
-      (acc, curr) => {
-        const [key, val] = curr;
-        if (key.includes('remotes/origin/')) return acc;
-        return {
-          ...acc,
-          [key]: val,
-        };
-      },
-      {}
-    );
-
-    // console.log({ branchesWithoutRemote });
     try {
+      const repo = await simpleGit(path);
+      await repo.pull();
+      await repo.fetch(['-ap']);
+      const branch = await repo.branch();
+
+      const branchesWithoutRemote = Object.entries(branch.branches).reduce(
+        (acc, curr) => {
+          const [key, val] = curr;
+          if (!key.includes('remotes/origin/')) return acc;
+          return {
+            ...acc,
+            [key]: val,
+          };
+        },
+        {}
+      );
+
+      console.log({ branch, branchesWithoutRemote });
+
+      console.log('inside the try');
       if (branchesWithoutRemote) {
+        console.log('inside the if');
         const commits = await Promise.all(
           Object.entries(branchesWithoutRemote).map(async ([_, val]) => {
             const info = await repo.log([val.commit]);
@@ -60,6 +63,7 @@ export function getRepoInfo(path) {
       }
     } catch (err) {
       console.log('ERROR', err);
+      dispatch(globalActions.setSnapshotMessage(err, 10));
     }
   };
 }

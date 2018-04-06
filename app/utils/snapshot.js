@@ -1,5 +1,5 @@
 // @flow
-import { copy, readFile, appendFile } from 'fs-extra';
+import { copy, readFile, appendFile, pathExists } from 'fs-extra';
 import simpleGit from 'simple-git/promise';
 import { shell } from 'electron';
 import { TEMP_DIR } from '../utils/globals';
@@ -111,6 +111,19 @@ const showSuccessMessage = async (dispatch, port) => {
   );
 };
 
+const checkForNodeModules = async (dispatch, path) => {
+  const folderExists = await pathExists(`${path}/node_modules`);
+  console.log('PATH');
+  console.log(path);
+  dispatch(setSnapshotMessage('Checking for dependencies', 1));
+  console.log({ folderExists });
+  if (!folderExists) {
+    console.log('Installing node_modules...');
+    dispatch(setSnapshotMessage('Installing dependencies', 1));
+    await exec(`npm install --prefix ${path}`);
+  }
+  dispatch(setSnapshotMessage('Dependencies Installed', 1));
+};
 const snapshot = async ({ state, dispatch }) => {
   const { git, project, commitsTable, global } = state;
   const { repo, currentBranch } = git;
@@ -129,6 +142,7 @@ const snapshot = async ({ state, dispatch }) => {
     dispatch(setAppServer(null));
   }
   try {
+    await checkForNodeModules(dispatch, path);
     // await ignoreSnapshot(dispatch, path);
     // await warnIfUncommittedChanges(dispatch, commit);
     await checkoutGitCommit(dispatch, path, selectedCommit, repo);
