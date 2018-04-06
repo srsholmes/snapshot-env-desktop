@@ -119,7 +119,12 @@ const checkForNodeModules = async (dispatch, path) => {
   console.log({ folderExists });
   if (!folderExists) {
     console.log('Installing node_modules...');
-    dispatch(setSnapshotMessage('Installing dependencies', 1));
+    dispatch(
+      setSnapshotMessage(
+        'Installing dependencies, this might take a while 🕐',
+        1
+      )
+    );
     await exec(`npm install --prefix ${path}`);
   }
   dispatch(setSnapshotMessage('Dependencies Installed', 1));
@@ -127,13 +132,11 @@ const checkForNodeModules = async (dispatch, path) => {
 const snapshot = async ({ state, dispatch }) => {
   const { git, project, commitsTable, global } = state;
   const { repo, currentBranch } = git;
-
   // TODO: repo.cwd(workingDirectory), sets current working dir of repo.
   const { path, config } = project;
   const { selectedCommit } = commitsTable;
   const { build, output } = config;
   const { appServer } = global.server;
-
   dispatch(openModal('Building your snapshot 😊'));
   if (appServer) {
     appServer.close(() => {
