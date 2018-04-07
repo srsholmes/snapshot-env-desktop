@@ -8,10 +8,7 @@ import { configureStore, history } from './store/configureStore';
 import './app.global.css';
 import { setConfigInfo, setProjectPath } from './reducers/project';
 import { getRepoInfo } from './reducers/git';
-
-
-
-
+import fontIcon from './utils/fontIcon';
 // Fix path for bundle
 fixPath();
 
@@ -20,11 +17,6 @@ document.ondragover = document.ondrop = ev => {
 };
 
 const store = configureStore();
-
-console.log('****************************');
-console.log(window && window.process && window.process.type);
-
-
 
 document.body.ondrop = ev => {
   const { path } = ev.dataTransfer.files[0];
