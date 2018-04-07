@@ -1,4 +1,5 @@
 // @flow
+import bugsnag from 'bugsnag';
 import snapshot from '../utils/snapshot';
 import { globalActions } from './global';
 
@@ -8,7 +9,7 @@ const simpleGit = require('simple-git/promise');
 // /git for-each-ref --sort='committerdate:iso8601' --format='%(align:width=40)%(refname:short)%(end)%(committerdate:relative)' --no-merged origin/master refs/remotes/origin
 
 // Get the git directory.
-//git rev-parse --show-toplevel
+// git rev-parse --show-toplevel
 
 export function getRepoInfo(path) {
   return async (dispatch: action => void) => {
@@ -64,6 +65,7 @@ export function getRepoInfo(path) {
     } catch (err) {
       console.log('ERROR', err);
       dispatch(globalActions.setSnapshotMessage(err, 10));
+      bugsnag.notify(new Error(err));
     }
   };
 }

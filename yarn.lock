@@ -86,6 +86,10 @@
     lodash "^4.2.0"
     to-fast-properties "^2.0.0"
 
+"@bugsnag/cuid@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@bugsnag/cuid/-/cuid-3.0.0.tgz#2ee7642a30aee6dc86f5e7f824653741e42e5c35"
+
 "@fortawesome/fontawesome-common-types@^0.1.3":
   version "0.1.3"
   resolved "https://npm.fontawesome.com/20560046-54B8-41E0-8E27-4D38946CD954/@fortawesome/fontawesome-common-types/-/fontawesome-common-types-0.1.3.tgz#8475e0f2d1ad1f858c4ec2e76ed9a2456a09ad83"
@@ -1447,6 +1451,10 @@ babylon@^6.16.1, babylon@^6.18.0:
   version "6.18.0"
   resolved "https://registry.yarnpkg.com/babylon/-/babylon-6.18.0.tgz#af2f3b88fa6f5c1e4c634d1a0f8eac4f55b395e3"
 
+backo@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/backo/-/backo-1.1.0.tgz#a36c4468923f2d265c9e8a709ea56ecdaff807e6"
+
 bail@^1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/bail/-/bail-1.0.2.tgz#f7d6c1731630a9f9f0d4d35ed1f962e2074a1764"
@@ -1651,6 +1659,10 @@ brorand@^1.0.1:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/brorand/-/brorand-1.1.0.tgz#12c25efe40a45e3c323eb8675a0a0ce57b22371f"
 
+browser-fingerprint@0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/browser-fingerprint/-/browser-fingerprint-0.0.1.tgz#8df3cdca25bf7d5b3542d61545d730053fce604a"
+
 browser-process-hrtime@^0.1.2:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/browser-process-hrtime/-/browser-process-hrtime-0.1.2.tgz#425d68a58d3447f02a04aa894187fce8af8b7b8e"
@@ -1706,6 +1718,13 @@ browserify-sign@^4.0.0:
     elliptic "^6.0.0"
     inherits "^2.0.1"
     parse-asn1 "^5.0.0"
+
+browserify-versionify@^1.0.6:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/browserify-versionify/-/browserify-versionify-1.0.6.tgz#ab2dc61d6a119e627bec487598d1983b7fdb275e"
+  dependencies:
+    find-root "^0.1.1"
+    through2 "0.6.3"
 
 browserify-zlib@^0.2.0:
   version "0.2.0"
@@ -1775,6 +1794,32 @@ buffer@^5.0.3:
 buffers@~0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/buffers/-/buffers-0.1.1.tgz#b24579c3bed4d6d396aeee6d9a8ae7f5482ab7bb"
+
+bugsnag-js@^4.5.0:
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/bugsnag-js/-/bugsnag-js-4.5.0.tgz#bacbb20e8dff85e1e6a3c725c0cd64b17586d125"
+  dependencies:
+    "@bugsnag/cuid" "^3.0.0"
+    browserify-versionify "^1.0.6"
+    error-stack-parser "^2.0.1"
+    fast-safe-stringify "^1.2.3"
+    iserror "0.0.2"
+    stack-generator "github:bengourley/stack-generator#190a6f500cfc4a9ef77db204b4f571964e39c3d8"
+
+bugsnag-react@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/bugsnag-react/-/bugsnag-react-1.1.1.tgz#da210c9102acfa427a3cdd00efa8cca785b87ea8"
+
+bugsnag@^2.3.1:
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/bugsnag/-/bugsnag-2.3.1.tgz#385f790992602835f0b4db0f2d5a000193fdda87"
+  dependencies:
+    backo "^1.1.0"
+    cuid "^1.3.8"
+    json-stringify-safe "~5.0.1"
+    promise "7.x"
+    request "^2.81.0"
+    stack-trace "~0.0.9"
 
 builder-util-runtime@4.0.4:
   version "4.0.4"
@@ -2452,7 +2497,7 @@ copy-descriptor@^0.1.0:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/copy-descriptor/-/copy-descriptor-0.1.1.tgz#676f6eb3c39997c2ee1ac3a924fd6124748f578d"
 
-core-js@^1.0.0:
+core-js@^1.0.0, core-js@^1.1.1:
   version "1.2.7"
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-1.2.7.tgz#652294c14651db28fa93bd2d5ff2983a4f08c636"
 
@@ -2776,6 +2821,14 @@ cssom@0.3.x, "cssom@>= 0.3.2 < 0.4.0":
   resolved "https://registry.yarnpkg.com/cssstyle/-/cssstyle-0.2.37.tgz#541097234cb2513c83ceed3acddc27ff27987d54"
   dependencies:
     cssom "0.3.x"
+
+cuid@^1.3.8:
+  version "1.3.8"
+  resolved "https://registry.yarnpkg.com/cuid/-/cuid-1.3.8.tgz#4b875e0969bad764f7ec0706cf44f5fb0831f6b7"
+  dependencies:
+    browser-fingerprint "0.0.1"
+    core-js "^1.1.1"
+    node-fingerprint "0.0.2"
 
 currently-unhandled@^0.4.1:
   version "0.4.1"
@@ -3505,6 +3558,12 @@ error-stack-parser@^1.3.6:
   dependencies:
     stackframe "^0.3.1"
 
+error-stack-parser@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/error-stack-parser/-/error-stack-parser-2.0.1.tgz#a3202b8fb03114aa9b40a0e3669e48b2b65a010a"
+  dependencies:
+    stackframe "^1.0.3"
+
 es-abstract@^1.5.1, es-abstract@^1.6.1, es-abstract@^1.7.0:
   version "1.11.0"
   resolved "https://registry.yarnpkg.com/es-abstract/-/es-abstract-1.11.0.tgz#cce87d518f0496893b1a30cd8461835535480681"
@@ -4065,6 +4124,10 @@ fast-json-stable-stringify@^2.0.0:
 fast-levenshtein@^2.0.6, fast-levenshtein@~2.0.4:
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/fast-levenshtein/-/fast-levenshtein-2.0.6.tgz#3d8a5c66883a16a30ca8643e851f19baa7797917"
+
+fast-safe-stringify@^1.2.3:
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/fast-safe-stringify/-/fast-safe-stringify-1.2.3.tgz#9fe22c37fb2f7f86f06b8f004377dbf8f1ee7bc1"
 
 fastparse@^1.1.1:
   version "1.1.1"
@@ -5036,9 +5099,15 @@ hyphenate-style-name@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/hyphenate-style-name/-/hyphenate-style-name-1.0.2.tgz#31160a36930adaf1fc04c6074f7eb41465d4ec4b"
 
-iconv-lite@0.4.19, iconv-lite@^0.4.17, iconv-lite@^0.4.19, iconv-lite@~0.4.13:
+iconv-lite@0.4.19, iconv-lite@^0.4.17, iconv-lite@^0.4.19:
   version "0.4.19"
   resolved "https://registry.yarnpkg.com/iconv-lite/-/iconv-lite-0.4.19.tgz#f7468f60135f5e5dad3399c0a81be9a1603a082b"
+
+iconv-lite@~0.4.13:
+  version "0.4.21"
+  resolved "https://registry.yarnpkg.com/iconv-lite/-/iconv-lite-0.4.21.tgz#c47f8733d02171189ebc4a400f3218d348094798"
+  dependencies:
+    safer-buffer "^2.1.0"
 
 icss-replace-symbols@^1.1.0:
   version "1.1.0"
@@ -5572,6 +5641,10 @@ isarray@1.0.0, isarray@^1.0.0, isarray@~1.0.0:
 isbinaryfile@^3.0.2:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/isbinaryfile/-/isbinaryfile-3.0.2.tgz#4a3e974ec0cba9004d3fc6cde7209ea69368a621"
+
+iserror@0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/iserror/-/iserror-0.0.2.tgz#bd53451fe2f668b9f2402c1966787aaa2c7c0bf5"
 
 isexe@^2.0.0:
   version "2.0.0"
@@ -6998,6 +7071,10 @@ node-fetch@^1.0.1:
     encoding "^0.1.11"
     is-stream "^1.0.1"
 
+node-fingerprint@0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/node-fingerprint/-/node-fingerprint-0.0.2.tgz#31cbabeb71a67ae7dd5a7dc042e51c3c75868501"
+
 node-forge@0.7.1:
   version "0.7.1"
   resolved "https://registry.yarnpkg.com/node-forge/-/node-forge-0.7.1.tgz#9da611ea08982f4b94206b3beb4cc9665f20c300"
@@ -8136,7 +8213,7 @@ promise-inflight@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/promise-inflight/-/promise-inflight-1.0.1.tgz#98472870bf228132fcbdd868129bad12c3c029e3"
 
-promise@^7.1.1:
+promise@7.x, promise@^7.1.1:
   version "7.3.1"
   resolved "https://registry.yarnpkg.com/promise/-/promise-7.3.1.tgz#064b72602b18f90f29192b8b1bc418ffd1ebd3bf"
   dependencies:
@@ -8469,8 +8546,8 @@ react-transition-group@^2.2.1:
     warning "^3.0.0"
 
 react@^16.2.0:
-  version "16.3.0"
-  resolved "https://registry.yarnpkg.com/react/-/react-16.3.0.tgz#fc5a01c68f91e9b38e92cf83f7b795ebdca8ddff"
+  version "16.3.1"
+  resolved "https://registry.yarnpkg.com/react/-/react-16.3.1.tgz#4a2da433d471251c69b6033ada30e2ed1202cfd8"
   dependencies:
     fbjs "^0.8.16"
     loose-envify "^1.1.0"
@@ -9083,6 +9160,10 @@ safe-regex@^1.1.0:
   dependencies:
     ret "~0.1.10"
 
+safer-buffer@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/safer-buffer/-/safer-buffer-2.1.0.tgz#d9f653a55538c8d7829cb1a92e90bbcbc5ff5d3b"
+
 samsam@1.3.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/samsam/-/samsam-1.3.0.tgz#8d1d9350e25622da30de3e44ba692b5221ab7c50"
@@ -9607,6 +9688,16 @@ ssri@^5.2.4:
   dependencies:
     safe-buffer "^5.1.1"
 
+"stack-generator@github:bengourley/stack-generator#190a6f500cfc4a9ef77db204b4f571964e39c3d8":
+  version "2.0.2"
+  resolved "https://codeload.github.com/bengourley/stack-generator/tar.gz/190a6f500cfc4a9ef77db204b4f571964e39c3d8"
+  dependencies:
+    stackframe "^1.0.4"
+
+stack-trace@~0.0.9:
+  version "0.0.10"
+  resolved "https://registry.yarnpkg.com/stack-trace/-/stack-trace-0.0.10.tgz#547c70b347e8d32b4e108ea1a2a159e5fdde19c0"
+
 stack-utils@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/stack-utils/-/stack-utils-1.0.1.tgz#d4f33ab54e8e38778b0ca5cfd3b3afb12db68620"
@@ -9614,6 +9705,10 @@ stack-utils@^1.0.1:
 stackframe@^0.3.1:
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/stackframe/-/stackframe-0.3.1.tgz#33aa84f1177a5548c8935533cbfeb3420975f5a4"
+
+stackframe@^1.0.3, stackframe@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/stackframe/-/stackframe-1.0.4.tgz#357b24a992f9427cba6b545d96a14ed2cbca187b"
 
 stat-mode@^0.2.2:
   version "0.2.2"
@@ -10187,6 +10282,13 @@ throat@^4.0.0:
 throttleit@0.0.2:
   version "0.0.2"
   resolved "https://registry.yarnpkg.com/throttleit/-/throttleit-0.0.2.tgz#cfedf88e60c00dd9697b61fdd2a8343a9b680eaf"
+
+through2@0.6.3:
+  version "0.6.3"
+  resolved "https://registry.yarnpkg.com/through2/-/through2-0.6.3.tgz#795292fde9f254c2a368b38f9cc5d1bd4663afb6"
+  dependencies:
+    readable-stream ">=1.0.33-1 <1.1.0-0"
+    xtend ">=4.0.0 <4.1.0-0"
 
 through2@^0.6.1, through2@^0.6.3, through2@~0.6.1:
   version "0.6.5"

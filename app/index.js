@@ -1,16 +1,18 @@
+
 import React from 'react';
 import { render } from 'react-dom';
+import fixPath from 'fix-path';
 import { AppContainer } from 'react-hot-loader';
 import Root from './containers/Root';
-import fontIcons from './utils/fontIcon';
 import { configureStore, history } from './store/configureStore';
 import './app.global.css';
-import { setProjectPath, setConfigInfo } from './reducers/project';
+import { setConfigInfo, setProjectPath } from './reducers/project';
 import { getRepoInfo } from './reducers/git';
-import initialState from './store/example-state';
+
+
+
 
 // Fix path for bundle
-const fixPath = require('fix-path');
 fixPath();
 
 document.ondragover = document.ondrop = ev => {
@@ -18,6 +20,11 @@ document.ondragover = document.ondrop = ev => {
 };
 
 const store = configureStore();
+
+console.log('****************************');
+console.log(window && window.process && window.process.type);
+
+
 
 document.body.ondrop = ev => {
   const { path } = ev.dataTransfer.files[0];
