@@ -20,12 +20,12 @@ const closeModal = () => async (dispatch: action => void) => {
   });
 };
 
-const setSnapshotMessage = (msg, progress) => async (dispatch, getState) => {
+const setSnapshotMessage = (msg, progress) => async dispatch => {
   // console.log(getState());
   return dispatch({
     type: 'SET_GLOBAL_SNAPSHOT_MESSAGE',
     payload: {
-      message: msg,
+      message: msg.toString(),
       progress,
     },
   });

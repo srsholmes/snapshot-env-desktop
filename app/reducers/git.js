@@ -12,7 +12,7 @@ const simpleGit = require('simple-git/promise');
 // git rev-parse --show-toplevel
 
 export function getRepoInfo(path) {
-  return async (dispatch: action => void) => {
+  return async (dispatch: action => void, getState) => {
     dispatch(globalActions.openModal('Please wait ⏳'));
     try {
       const repo = await simpleGit(path);
@@ -33,8 +33,8 @@ export function getRepoInfo(path) {
       );
 
       console.log({ branch, branchesWithoutRemote });
-
       console.log('inside the try');
+
       if (branchesWithoutRemote) {
         console.log('inside the if');
         const commits = await Promise.all(
@@ -64,8 +64,8 @@ export function getRepoInfo(path) {
       }
     } catch (err) {
       console.log('ERROR', err);
-      dispatch(globalActions.setSnapshotMessage(err.toString(), 10));
-      bugsnag.notify(new Error(err));
+      dispatch(globalActions.setSnapshotMessage(err, 10));
+      bugsnag.notify(new Error(err), { state: getState(), repo });
     }
   };
 }
