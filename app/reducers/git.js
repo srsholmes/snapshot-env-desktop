@@ -64,7 +64,7 @@ export function getRepoInfo(path) {
       }
     } catch (err) {
       console.log('ERROR', err);
-      dispatch(globalActions.setSnapshotMessage(err, 10));
+      dispatch(globalActions.setSnapshotMessage(err.toString(), 10));
       bugsnag.notify(new Error(err));
     }
   };
