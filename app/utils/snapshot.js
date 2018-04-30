@@ -1,8 +1,6 @@
 // @flow
-import { copy, readFile, appendFile, pathExists } from 'fs-extra';
-import simpleGit from 'simple-git/promise';
+import { copy, pathExists } from 'fs-extra';
 import { shell } from 'electron';
-import { TEMP_DIR } from '../utils/globals';
 import promisify from '../utils/promisify';
 import { globalActions } from '../reducers/global';
 
@@ -17,38 +15,8 @@ const { log } = console;
 const separator = () => log('*'.repeat(80));
 const { openModal, setSnapshotMessage, setAppServer } = globalActions;
 
-// const warnIfUncommittedChanges = async commit => {
-//   if (commit) {
-//     log('Checking to see if current branch has unstaged changes...');
-//     const { stdout } = await exec('git diff-index --quiet HEAD -- || echo "untracked"  >&1');
-//     if (stdout) {
-//       throw new Error(`You have uncommitted changes which would be lost by creating a snapshot of a different branch \n
-//         Please either stash or commit your changes before creating a snapshot of a specific commit.`);
-//     }
-//   }
-// };
-
-const ignoreSnapshot = async (dispatch, path) => {
-  separator();
-  const name = '.gitignore';
-  const theGitIgnorePath = `${`${path}/${name}`}`;
-  const file = await readFile(theGitIgnorePath, 'utf8');
-  const lines = file.split('\n');
-  const isIgnored = lines.find(x => x === 'snapshots');
-  if (!isIgnored) {
-    dispatch(setSnapshotMessage('Adding snapshot to gitignore', 1));
-    await appendFile(`${`${path}/${name}`}`, '\nsnapshots\n');
-    const repo = await simpleGit(path);
-    await repo.add('.gitignore');
-    await repo.commit('added snapshot to .gitignore', '.gitignore');
-  }
-  log('Snapshot directory added to gitignore');
-  dispatch(setSnapshotMessage('Snapshot directory added to gitignore', 2));
-};
-
-const checkoutGitCommit = async (dispatch, path, commit) => {
+const checkoutGitCommit = async (dispatch, path, commit, repo) => {
   if (commit) {
-    const repo = await simpleGit(path);
     await repo.checkout(commit);
     dispatch(setSnapshotMessage(`Checking out commit ${commit}`, 3));
   }
@@ -62,10 +30,14 @@ const createLocalServer = async (dispatch, dir) => {
       7
     )
   );
-  const { port, app } = await server(dir);
+  const { port, app, ngrok } = await server(dir);
   shell.openExternal(`http://localhost:${port}`);
-  console.log({ port, app });
-  dispatch(setAppServer(app));
+  dispatch(
+    setAppServer({
+      ngrok,
+      appServer: app,
+    })
+  );
   dispatch(
     setSnapshotMessage(`View local deploy here: http://localhost:${port}`, 8)
   );
@@ -75,7 +47,7 @@ const createLocalServer = async (dispatch, dir) => {
 const runBuildStep = async (dispatch, cmd, path) => {
   separator();
   dispatch(setSnapshotMessage('Running build process...', 4));
-  const { stdout, stderr } = await exec(`${cmd} --prefix ${path}`, {
+  await exec(`${cmd} --prefix ${path}`, {
     shell: true,
     maxBuffer: 1024 * 8000,
   });
@@ -84,7 +56,6 @@ const runBuildStep = async (dispatch, cmd, path) => {
 const copyBuildDir = async (dispatch, output, path, commitId) => {
   separator();
   dispatch(setSnapshotMessage('Copying output directory', 5));
-  const dir = `${path}/${TEMP_DIR}/${commitId}`;
   const electronPath = `${`${app.getPath('userData')}/${commitId}`}`;
   await copy(`${path}/${output}`, electronPath);
   dispatch(setSnapshotMessage('Directory copied!', 6));
@@ -101,11 +72,12 @@ const revertGitCheckout = async (dispatch, branch, repo, err) => {
   );
 };
 
-const showSuccessMessage = async (dispatch, port) => {
+const showSuccessMessage = async (dispatch, port, url) => {
   dispatch(
     setSnapshotMessage(
       `Successfully built snapshot 👍. \n
-      View on http://localhost:${port}`,
+      View on http://localhost:${port} \n
+      or externally on ${url}`,
       11
     )
   );
@@ -113,12 +85,8 @@ const showSuccessMessage = async (dispatch, port) => {
 
 const checkForNodeModules = async (dispatch, path) => {
   const folderExists = await pathExists(`${path}/node_modules`);
-  console.log('PATH');
-  console.log(path);
   dispatch(setSnapshotMessage('Checking for dependencies', 1));
-  console.log({ folderExists });
   if (!folderExists) {
-    console.log('Installing node_modules...');
     dispatch(
       setSnapshotMessage(
         'Installing dependencies, this might take a while 🕐',
@@ -142,11 +110,10 @@ const snapshot = async ({ state, dispatch }) => {
     appServer.close(() => {
       dispatch(setSnapshotMessage(`Removing previous hosted snapshot`));
     });
-    dispatch(setAppServer(null));
+    dispatch(setAppServer({ appServer: null, ngrok: null }));
   }
   try {
     await checkForNodeModules(dispatch, path);
-    // await ignoreSnapshot(dispatch, path);
     // await warnIfUncommittedChanges(dispatch, commit);
     await checkoutGitCommit(dispatch, path, selectedCommit, repo);
     await runBuildStep(dispatch, build, path);
@@ -156,9 +123,12 @@ const snapshot = async ({ state, dispatch }) => {
       path,
       selectedCommit
     );
-    const { port, app } = await createLocalServer(dispatch, directoryToHost);
+    const { port, ngrok: { url } } = await createLocalServer(
+      dispatch,
+      directoryToHost
+    );
     await revertGitCheckout(dispatch, currentBranch, repo);
-    showSuccessMessage(dispatch, port);
+    showSuccessMessage(dispatch, port, url);
   } catch (err) {
     dispatch(setSnapshotMessage(`ERROR`, err));
     await revertGitCheckout(dispatch, currentBranch, repo, err);

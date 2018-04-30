@@ -40,11 +40,12 @@ const toggleDrawer = () => async (dispatch: action, getState) => {
   });
 };
 
-const setAppServer = server => async (dispatch: action) => {
+const setAppServer = ({ appServer, ngrok }) => async (dispatch: action) => {
   return dispatch({
     type: 'SET_APP_SERVER',
     payload: {
-      appServer: server,
+      appServer,
+      ngrok,
     },
   });
 };
@@ -67,6 +68,7 @@ const initialState = {
   },
   server: {
     appServer: null,
+    ngrok: null,
   },
 };
 

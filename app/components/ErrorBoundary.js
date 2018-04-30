@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import bugsnag from 'bugsnag';
+import { setSnapshotMessage } from '../reducers/global';
 
 bugsnag.register('aa8f89ed82f01fe73b2102b01110aecc');
 
@@ -13,6 +14,8 @@ class ErrorBoundary extends React.Component {
   componentDidCatch(error, info) {
     this.setState({ hasError: true });
     bugsnag.notify(new Error(error));
+    console.log('ERROR BOUNDARY');
+    this.props.store.dispatch(setSnapshotMessage('Something went wrong', 0));
   }
 
   render() {

@@ -13,7 +13,7 @@ type Props = {
 export default class Root extends Component<Props> {
   render() {
     return (
-      <ErrorBoundary>
+      <ErrorBoundary store={this.props.store}>
         <Provider store={this.props.store}>
           <ConnectedRouter history={this.props.history}>
             <Routes />

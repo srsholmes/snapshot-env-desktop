@@ -5,19 +5,22 @@ import { globalActions } from './global';
 
 const simpleGit = require('simple-git/promise');
 
-// Command to get all the branches on the ref and sort them by date.
-// /git for-each-ref --sort='committerdate:iso8601' --format='%(align:width=40)%(refname:short)%(end)%(committerdate:relative)' --no-merged origin/master refs/remotes/origin
-
-// Get the git directory.
-// git rev-parse --show-toplevel
-
 export function getRepoInfo(path) {
   return async (dispatch: action => void, getState) => {
     dispatch(globalActions.openModal('Please wait ⏳'));
     try {
       const repo = await simpleGit(path);
+      console.log('************')
+      console.log({ repo })
+      console.log(1)
+      await repo.reset('HARD');
+      console.log(2)
+      await repo.checkout('master');
+      console.log(3)
       await repo.pull();
+      console.log(4)
       await repo.fetch(['-ap']);
+      console.log(5)
       const branch = await repo.branch();
 
       const branchesWithoutRemote = Object.entries(branch.branches).reduce(
@@ -33,10 +36,8 @@ export function getRepoInfo(path) {
       );
 
       console.log({ branch, branchesWithoutRemote });
-      console.log('inside the try');
 
       if (branchesWithoutRemote) {
-        console.log('inside the if');
         const commits = await Promise.all(
           Object.entries(branchesWithoutRemote).map(async ([_, val]) => {
             const info = await repo.log([val.commit]);
@@ -66,7 +67,7 @@ export function getRepoInfo(path) {
       const repo = await simpleGit(path);
       console.log('ERROR', err);
       dispatch(globalActions.setSnapshotMessage(err, 10));
-      bugsnag.notify(new Error(err), { state: getState(), repo: repo });
+      bugsnag.notify(new Error(err), { state: getState(), repo });
     }
   };
 }
