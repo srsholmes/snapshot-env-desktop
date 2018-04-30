@@ -14,8 +14,8 @@ const simpleGit = require('simple-git/promise');
 export function getRepoInfo(path) {
   return async (dispatch: action => void, getState) => {
     dispatch(globalActions.openModal('Please wait ⏳'));
-    const repo = await simpleGit(path);
     try {
+      const repo = await simpleGit(path);
       await repo.pull();
       await repo.fetch(['-ap']);
       const branch = await repo.branch();
@@ -63,9 +63,10 @@ export function getRepoInfo(path) {
         });
       }
     } catch (err) {
+      const repo = await simpleGit(path);
       console.log('ERROR', err);
       dispatch(globalActions.setSnapshotMessage(err, 10));
-      bugsnag.notify(new Error(err), { state: getState(), repo });
+      bugsnag.notify(new Error(err), { state: getState(), repo: repo });
     }
   };
 }
