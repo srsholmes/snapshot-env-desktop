@@ -14,8 +14,8 @@ const simpleGit = require('simple-git/promise');
 export function getRepoInfo(path) {
   return async (dispatch: action => void, getState) => {
     dispatch(globalActions.openModal('Please wait ⏳'));
+    const repo = await simpleGit(path);
     try {
-      const repo = await simpleGit(path);
       await repo.pull();
       await repo.fetch(['-ap']);
       const branch = await repo.branch();

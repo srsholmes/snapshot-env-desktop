@@ -1,3 +1,4 @@
+// @flow
 import { remote } from 'electron';
 
 const { dialog } = remote;

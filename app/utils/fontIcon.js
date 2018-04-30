@@ -1,3 +1,4 @@
+// @flow
 import fontawesome from '@fortawesome/fontawesome';
 import faCodeBranch from '@fortawesome/fontawesome-pro-light/faCodeBranch';
 import faOpenFolder from '@fortawesome/fontawesome-pro-light/faFolderOpen';
