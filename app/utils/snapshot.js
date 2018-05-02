@@ -41,7 +41,7 @@ const createLocalServer = async (dispatch, dir) => {
   dispatch(
     setSnapshotMessage(`View local deploy here: http://localhost:${port}`, 8)
   );
-  return { port, app };
+  return { port, app, ngrok };
 };
 
 const runBuildStep = async (dispatch, cmd, path) => {
@@ -72,12 +72,12 @@ const revertGitCheckout = async (dispatch, branch, repo, err) => {
   );
 };
 
-const showSuccessMessage = async (dispatch, port, url) => {
+const showSuccessMessage = async (dispatch, port, nGrokUrl) => {
   dispatch(
     setSnapshotMessage(
       `Successfully built snapshot 👍. \n
       View on http://localhost:${port} \n
-      or externally on ${url}`,
+      or externally on ${nGrokUrl}`,
       11
     )
   );
@@ -123,13 +123,12 @@ const snapshot = async ({ state, dispatch }) => {
       path,
       selectedCommit
     );
-    const { port, ngrok: { url } } = await createLocalServer(
-      dispatch,
-      directoryToHost
-    );
+    const { port, ngrok } = await createLocalServer(dispatch, directoryToHost);
     await revertGitCheckout(dispatch, currentBranch, repo);
-    showSuccessMessage(dispatch, port, url);
+    showSuccessMessage(dispatch, port, ngrok.url);
   } catch (err) {
+    console.log('**************');
+    console.log(err);
     dispatch(setSnapshotMessage(`ERROR`, err));
     await revertGitCheckout(dispatch, currentBranch, repo, err);
   }

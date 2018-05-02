@@ -10,17 +10,17 @@ export function getRepoInfo(path) {
     dispatch(globalActions.openModal('Please wait ⏳'));
     try {
       const repo = await simpleGit(path);
-      console.log('************')
-      console.log({ repo })
-      console.log(1)
+      console.log('************');
+      console.log({ repo });
+      console.log(1);
       await repo.reset('HARD');
-      console.log(2)
+      console.log(2);
       await repo.checkout('master');
-      console.log(3)
+      console.log(3);
       await repo.pull();
-      console.log(4)
+      console.log(4);
       await repo.fetch(['-ap']);
-      console.log(5)
+      console.log(5);
       const branch = await repo.branch();
 
       const branchesWithoutRemote = Object.entries(branch.branches).reduce(
